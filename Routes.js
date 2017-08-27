@@ -58,6 +58,19 @@ app.get("/updateprofilepic",(req,res)=>{
   });
 });
 
+app.get("/getreceivedpost",(req,res)=>{
+  User.find({email:req.query.email},(err,resp)=>{
+    if(!err){
+      res.send(resp[0].recpost);
+    }
+    else {
+      res.send("0");
+    }
+  });
+});
+
+
+
 //Send a new post
 app.get("/send",(req,res)=>{
   //Update for user for whom the message is meant for
