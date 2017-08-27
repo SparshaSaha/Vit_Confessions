@@ -2,10 +2,11 @@
 const express = require("express");
 const mongoose = require("mongoose");
 
-//mongodb://heroku_cpwbzfrf:avb8nsib2n1l7me56jjlkba6ok@ds145303.mlab.com:45303/heroku_cpwbzfrf
+//mongodb://heroku_f0sjv5j4:f2son00gvrf3d0mhq8u62k4upk@ds161793.mlab.com:61793/heroku_f0sjv5j4
+
 //'mongodb://127.0.0.1:27017/Confessionsdatabase'
 
-var db = mongoose.connection.openUri('mongodb://heroku_cpwbzfrf:avb8nsib2n1l7me56jjlkba6ok@ds145303.mlab.com:45303/heroku_cpwbzfrf'); 
+var db = mongoose.connection.openUri('mongodb://heroku_f0sjv5j4:f2son00gvrf3d0mhq8u62k4upk@ds161793.mlab.com:61793/heroku_f0sjv5j4'); 
 
 
 mongoose.connection.once('connected',function(){
