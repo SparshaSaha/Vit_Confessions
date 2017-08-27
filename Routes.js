@@ -31,7 +31,7 @@ app.get("/signin",(req,res)=>{
       res.send('0');
       }
       else {
-        res.send(resp.json());
+        res.send(resp);
       }
   });
 });
