@@ -169,8 +169,8 @@ app.get("/searchuser",(req,res)=>{
 
 app.get("/dummy",(req,res)=>{
   var Kol={
-    username="Sparsha",
-    password="cool a.f"
+    username:"Sparsha",
+    password:"cool a.f"
   };
 
   res.json(Kol);
