@@ -34,7 +34,7 @@ app.get("/signin",(req,res)=>{
         var temp={
           username:resp[0].username+""
         };
-        res.json(temp);
+        res.json(JSON.stringify(temp));
       }
   });
 });
