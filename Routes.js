@@ -32,7 +32,7 @@ app.get("/signin",(req,res)=>{
       }
       else {
         var temp={
-          username:resp[0].username
+          username:resp[0].username+""
         };
         res.json(temp);
       }
