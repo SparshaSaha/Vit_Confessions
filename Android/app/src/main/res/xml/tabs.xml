@@ -1,0 +1,14 @@
+<tabs>
+    <tab
+        id="@+id/tab_message"
+        icon = "@drawable/ic_post"
+        barColorWhenSelected="#ff5252"/>
+    <tab
+        id="@+id/tab_send"
+        icon = "@drawable/ic_send"
+        barColorWhenSelected="#009688"/>
+    <tab
+        id="@+id/tab_profile"
+        icon = "@drawable/ic_profile"
+        barColorWhenSelected="#005ecb"/>
+</tabs>
