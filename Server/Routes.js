@@ -166,7 +166,12 @@ app.get("/searchuser",(req,res)=>{
             }
 
             else {
-              res.json(resp);
+              var temp=new Array();
+              for(i=0;i<resp.length;i++)
+              {
+                temp.push(resp[i].username);
+              }
+              res.send(temp);
               z=1;
             }
           });
@@ -175,13 +180,24 @@ app.get("/searchuser",(req,res)=>{
 
         else {
           res.json(resp);
+          var temp=new Array();
+          for(i=0;i<resp.length;i++)
+          {
+            temp.push(resp[i].reg_no);
+          }
+          res.send(temp);
           z=1;
         }
       });
     }
 
     else {
-      res.json(resp);
+      var temp=new Array();
+      for(i=0;i<resp.length;i++)
+      {
+        temp.push(resp[i].name);
+      }
+      res.send(temp);
       z=1;
     }
       });
