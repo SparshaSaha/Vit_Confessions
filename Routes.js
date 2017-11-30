@@ -44,11 +44,10 @@ app.get("/signin",(req,res)=>{
           standing_credits:resp[0].standing_credits,
           photo_link:resp[0].photo_link
         };
-<<<<<<< HEAD
+
         res.send(JSON.stringify(temp));
-=======
+
         res.json(temp);
->>>>>>> 2c1af876bc3e9660e337d1b4b2a476b1fd1d0185
       }
   });
 });
