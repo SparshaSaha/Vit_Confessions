@@ -34,7 +34,6 @@ app.get("/signin",(req,res)=>{
       else {
 
         var temp={
-
           email:resp[0].email,
           password:resp[0].password,
           reg_no:resp[0].reg_no,
@@ -47,7 +46,7 @@ app.get("/signin",(req,res)=>{
 
 
         };
-        res.json(JSON.stringify(temp));
+        res.json(temp);
       }
   });
 });
@@ -183,6 +182,10 @@ app.get("/searchuser",(req,res)=>{
     }
       });
 });
+
+
+
+
 
 app.get("/dummy",(req,res)=>{
   var Kol={
