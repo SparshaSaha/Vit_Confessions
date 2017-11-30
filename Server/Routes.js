@@ -24,6 +24,7 @@ module.exports= function(app,mongo){
 
   });
 
+
 //Sign in user
 app.get("/signin",(req,res)=>{
   User.find({email:req.query.email,password:req.query.password},function(err,resp){
@@ -31,6 +32,7 @@ app.get("/signin",(req,res)=>{
       res.send('0');
       }
       else {
+
         var temp={
 
           email:resp[0].email,
@@ -49,7 +51,6 @@ app.get("/signin",(req,res)=>{
       }
   });
 });
-
 
 
 
@@ -72,10 +73,12 @@ app.get("/updateprofilepic",(req,res)=>{
   });
 });
 
+
 app.get("/getreceivedpost",(req,res)=>{
   User.find({email:req.query.email},(err,resp)=>{
     if(!err){
-      res.send(resp[0].recpost);
+      var temp=resp[0].recpost;
+      res.send(JSON.stringify(temp));
     }
     else {
       res.send("0");
@@ -102,8 +105,8 @@ app.get("/send",(req,res)=>{
     throw err;
     res.send("0");
   }
-
   });
+
 //Update sentmessagefor the sender
   User.update({email:req.query.frommail},{$push:{
     senpost:
