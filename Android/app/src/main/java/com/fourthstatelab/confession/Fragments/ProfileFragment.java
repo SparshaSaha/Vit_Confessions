@@ -66,7 +66,7 @@ public class ProfileFragment extends Fragment {
         // Inflate the layout for this fragment
 
       Account account;
-      account=new Gson().fromJson((String) Preference.get(getActivity(),PROFILE_JSON),new TypeToken<Account>(){}.getType());
+      account=new Gson().fromJson(getActivity().getSharedPreferences("pass",Context.MODE_PRIVATE).getString("profile_json",""),new TypeToken<Account>(){}.getType());
       View view=inflater.inflate(R.layout.fragment_profile,container,false);
       TextView name=(TextView)view.findViewById(R.id.username);
       TextView credits=(TextView)view.findViewById(R.id.credits_earned);

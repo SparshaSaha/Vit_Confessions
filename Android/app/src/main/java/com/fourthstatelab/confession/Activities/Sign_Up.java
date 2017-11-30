@@ -44,12 +44,12 @@ EditText email,password;
                                 @Override
                                 public void OnResponse(String response) {
                                     if(response.equals("0")==false){
-                                        Preference.put(getApplicationContext(),EMAIL,email.getText().toString());
+                                        getSharedPreferences("pass",Context.MODE_PRIVATE).edit().putString("email",email.getText().toString()).apply();
                                         getSharedPreferences("pass", Context.MODE_PRIVATE).edit().putString("password",password.getText().toString()).apply();
 
-                                        Log.d("profile_json",response);
+                                        Log.d("profile_json",response.toString());
 
-                                        Preference.put(getApplicationContext(),PROFILE_JSON,response);
+                                        getSharedPreferences("pass",Context.MODE_PRIVATE).edit().putString("profile_json",response.toString()).apply();
 
                                         startActivity(new Intent(Sign_Up.this,Dashboard.class));
                                         finish();

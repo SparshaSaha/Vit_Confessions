@@ -152,7 +152,13 @@ app.get("/searchuser",(req,res)=>{
 
                 }
                 else {
-                  res.json(resp);
+                  var temp=new Array();
+                  for(i=0;i<resp.length;i++)
+                  {
+                    temp.push(resp[i].email);
+                  }
+                  res.send(temp);
+
                   z=1;
                 }
 

@@ -93,9 +93,8 @@ public class PostsFragment extends Fragment {
         View v=inflater.inflate(R.layout.fragment_posts, container, false);
         ListView l=(ListView)v.findViewById(R.id.listview1);
       Account account;
-        Log.d("profile_json",""+Preference.get(getActivity(),PROFILE_JSON));
-      account=new Gson().fromJson((String) Preference.get(getActivity(),PROFILE_JSON),new TypeToken<Account>(){}.getType());
-
+        Log.d("profile_json",""+getActivity().getSharedPreferences("pass",Context.MODE_PRIVATE).getString("profile_json",""));
+      account=new Gson().fromJson(getActivity().getSharedPreferences("pass",Context.MODE_PRIVATE).getString("profile_json",""),new TypeToken<Account>(){}.getType());
         ReceivedPostAdapter receivedPostAdapter=new ReceivedPostAdapter(getActivity(),account.recpost);
         l.setAdapter(receivedPostAdapter);
 

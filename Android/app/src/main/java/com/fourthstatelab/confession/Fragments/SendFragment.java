@@ -82,7 +82,7 @@ public class SendFragment extends Fragment {
 
         lis=(ListView) v.findViewById(R.id.listview);
         Account account;
-        account=new Gson().fromJson((String) Preference.get(getActivity(),PROFILE_JSON),new TypeToken<Account>(){}.getType());
+        account=new Gson().fromJson(getActivity().getSharedPreferences("pass",Context.MODE_PRIVATE).getString("profile_json",""),new TypeToken<Account>(){}.getType());
 
 
         SentPostAdapter sp=new SentPostAdapter(getActivity(),account.senpost);
