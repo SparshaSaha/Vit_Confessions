@@ -43,10 +43,8 @@ app.get("/signin",(req,res)=>{
           name:resp[0].name,
           standing_credits:resp[0].standing_credits,
           photo_link:resp[0].photo_link
-
-
         };
-        res.json(temp);
+        res.send(JSON.stringify(temp));
       }
   });
 });

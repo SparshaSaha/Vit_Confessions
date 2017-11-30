@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,6 +93,7 @@ public class PostsFragment extends Fragment {
         View v=inflater.inflate(R.layout.fragment_posts, container, false);
         ListView l=(ListView)v.findViewById(R.id.listview1);
       Account account;
+        Log.d("profile_json",""+Preference.get(getActivity(),PROFILE_JSON));
       account=new Gson().fromJson((String) Preference.get(getActivity(),PROFILE_JSON),new TypeToken<Account>(){}.getType());
 
         ReceivedPostAdapter receivedPostAdapter=new ReceivedPostAdapter(getActivity(),account.recpost);

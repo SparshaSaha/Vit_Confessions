@@ -47,6 +47,8 @@ EditText email,password;
                                         Preference.put(getApplicationContext(),EMAIL,email.getText().toString());
                                         getSharedPreferences("pass", Context.MODE_PRIVATE).edit().putString("password",password.getText().toString()).apply();
 
+                                        Log.d("profile_json",response);
+
                                         Preference.put(getApplicationContext(),PROFILE_JSON,response);
 
                                         startActivity(new Intent(Sign_Up.this,Dashboard.class));
