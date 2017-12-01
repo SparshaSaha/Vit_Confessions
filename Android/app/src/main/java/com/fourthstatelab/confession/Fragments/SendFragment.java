@@ -9,20 +9,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ListView;
 
-import com.fourthstatelab.confession.Activities.Dashboard;
 import com.fourthstatelab.confession.R;
-import com.fourthstatelab.confession.SearchAndSend;
-import com.fourthstatelab.confession.Utils.Account;
+import com.fourthstatelab.confession.Activities.SearchAndSend;
 import com.fourthstatelab.confession.Utils.DataHolder;
-import com.fourthstatelab.confession.Utils.Preference;
 import com.fourthstatelab.confession.List_Adapters.SentPostAdapter;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import static com.fourthstatelab.confession.Utils.Preference.PROFILE_JSON;
 
 /**
  * A simple {@link Fragment} subclass.

@@ -1,4 +1,4 @@
-package com.fourthstatelab.confession;
+package com.fourthstatelab.confession.Activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,7 +8,11 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.fourthstatelab.confession.List_Adapters.SearchPostAdapter;
+import com.fourthstatelab.confession.R;
 import com.fourthstatelab.confession.Utils.HttpRequest;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.List;
 
@@ -34,7 +38,10 @@ Button searchbutton;
             .addParam("parms",z).sendRequest(new HttpRequest.OnResponseListener() {
               @Override
               public void OnResponse(String response) {
-                Toast.makeText(SearchAndSend.this, response, Toast.LENGTH_LONG).show();
+                List<String> temp=new Gson().fromJson(response,new TypeToken<List<String>>(){}.getType());
+                SearchPostAdapter s=new SearchPostAdapter(getApplicationContext(),temp);
+
+                searchview.setAdapter(s);
               }
             });
       }

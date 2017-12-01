@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activities.Sign_Up"/>
-        <activity android:name=".SearchAndSend">
+        <activity android:name=".Activities.SearchAndSend">
         </activity>
     </application>
 
