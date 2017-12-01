@@ -46,8 +46,6 @@ app.get("/signin",(req,res)=>{
         };
 
         res.send(JSON.stringify(temp));
-
-        res.json(temp);
       }
   });
 });

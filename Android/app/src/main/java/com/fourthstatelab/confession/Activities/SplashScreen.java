@@ -29,7 +29,6 @@ public class SplashScreen extends AppCompatActivity {
         if(z==null || z.equals("")==true)
         {
             navigate_to_signup();
-            Log.d("navigation_custom","Navigated to signup");
         }
         else
         {
@@ -52,7 +51,7 @@ public class SplashScreen extends AppCompatActivity {
                 .sendRequest(new HttpRequest.OnResponseListener() {
                     @Override
                     public void OnResponse(String response) {
-                        if(response.equals("0")!=true){
+                        if(response!=null && response.equals("0")!=true){
                             startActivity(new Intent(SplashScreen.this,Dashboard.class));
                             finish();
                         }
