@@ -1,6 +1,7 @@
 package com.fourthstatelab.confession.Fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -11,7 +12,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.fourthstatelab.confession.Activities.Dashboard;
 import com.fourthstatelab.confession.R;
+import com.fourthstatelab.confession.SearchAndSend;
 import com.fourthstatelab.confession.Utils.Account;
 import com.fourthstatelab.confession.Utils.DataHolder;
 import com.fourthstatelab.confession.Utils.Preference;
@@ -76,7 +79,7 @@ public class SendFragment extends Fragment {
         newpost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                
+                startActivity(new Intent(getActivity(), SearchAndSend.class));
             }
         });
 

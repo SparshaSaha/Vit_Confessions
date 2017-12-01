@@ -192,7 +192,6 @@ app.get("/searchuser",(req,res)=>{
         }
 
         else {
-          res.json(resp);
           var temp=new Array();
           for(i=0;i<resp.length;i++)
           {
