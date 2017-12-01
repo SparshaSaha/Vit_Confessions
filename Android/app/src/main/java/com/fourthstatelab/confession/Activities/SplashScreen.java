@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.fourthstatelab.confession.R;
@@ -24,10 +25,11 @@ public class SplashScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
-        String z=get(getApplicationContext(),EMAIL);
+        String z=getSharedPreferences("pass",Context.MODE_PRIVATE).getString("email","");
         if(z==null || z.equals("")==true)
         {
             navigate_to_signup();
+            Log.d("navigation_custom","Navigated to signup");
         }
         else
         {
@@ -45,13 +47,12 @@ public class SplashScreen extends AppCompatActivity {
     public void try_signin()
     {
         HttpRequest signin=(new HttpRequest(getApplicationContext(),"/signin"))
-                .addParam("email", (String) Preference.get(getApplicationContext(),EMAIL))
+                .addParam("email", getSharedPreferences("pass",Context.MODE_PRIVATE).getString("email",""))
                 .addParam("password", getSharedPreferences("pass", Context.MODE_PRIVATE).getString("password",""))
                 .sendRequest(new HttpRequest.OnResponseListener() {
                     @Override
                     public void OnResponse(String response) {
                         if(response.equals("0")!=true){
-                            Preference.put(getApplicationContext(),PROFILE_JSON,response);
                             startActivity(new Intent(SplashScreen.this,Dashboard.class));
                             finish();
                         }
