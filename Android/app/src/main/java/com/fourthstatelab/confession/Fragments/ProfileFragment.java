@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import com.fourthstatelab.confession.R;
 import com.fourthstatelab.confession.Utils.Account;
+import com.fourthstatelab.confession.Utils.DataHolder;
+import com.fourthstatelab.confession.Utils.HttpRequest;
 import com.fourthstatelab.confession.Utils.Preference;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -77,9 +79,21 @@ public class ProfileFragment extends Fragment {
       return view;
     }
 
-    public static void update_credits_to_server()
+    public static void update_credits_to_server(final Context con,final int cred)
     {
-      
+      HttpRequest update_credits=(new HttpRequest(con,"/update_credits"))
+          .addParam("email", DataHolder.account.email)
+          .addParam("password",DataHolder.account.password)
+          .addParam("credits", cred+"")
+          .sendRequest(new HttpRequest.OnResponseListener() {
+            @Override
+            public void OnResponse(String response) {
+              if(response!=null && !response.equals("0")) {
+                DataHolder.account.standing_credits = cred;
+                con.getSharedPreferences("pass", Context.MODE_PRIVATE).edit().putString("profile_json", new Gson().toJson(DataHolder.account));
+              }
+            }
+          });
     }
 
     // TODO: Rename method, update argument and hook method into UI event

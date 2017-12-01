@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.fourthstatelab.confession.List_Adapters.ReceivedPostAdapter;
 import com.fourthstatelab.confession.R;
 import com.fourthstatelab.confession.Utils.Account;
+import com.fourthstatelab.confession.Utils.DataHolder;
 import com.fourthstatelab.confession.Utils.HttpRequest;
 import com.fourthstatelab.confession.Utils.Preference;
 import com.google.gson.Gson;
@@ -76,7 +77,7 @@ public class PostsFragment extends Fragment {
     public void GetReceivedPost()
     {
         HttpRequest req=new HttpRequest(getActivity(),"/getreceivedpost")
-                .addParam("email","saha.sparsha@gmail.com")
+                .addParam("email",DataHolder.account.email)
                 .sendRequest(new HttpRequest.OnResponseListener() {
                     @Override
                     public void OnResponse(String response) {
@@ -92,10 +93,7 @@ public class PostsFragment extends Fragment {
         // Inflate the layout for this fragment
         View v=inflater.inflate(R.layout.fragment_posts, container, false);
         ListView l=(ListView)v.findViewById(R.id.listview1);
-      Account account;
-        Log.d("profile_json",""+getActivity().getSharedPreferences("pass",Context.MODE_PRIVATE).getString("profile_json",""));
-      account=new Gson().fromJson(getActivity().getSharedPreferences("pass",Context.MODE_PRIVATE).getString("profile_json",""),new TypeToken<Account>(){}.getType());
-        ReceivedPostAdapter receivedPostAdapter=new ReceivedPostAdapter(getActivity(),account.recpost);
+        ReceivedPostAdapter receivedPostAdapter=new ReceivedPostAdapter(getActivity(), DataHolder.account.recpost);
         l.setAdapter(receivedPostAdapter);
 
         return v;

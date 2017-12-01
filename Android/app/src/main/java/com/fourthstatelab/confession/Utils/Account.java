@@ -7,14 +7,12 @@ import java.util.ArrayList;
  */
 
 public class Account {
-    public double __v;
-    public String _id;
     public  String email;
     public   String password;
     public  String reg_no;
     public String username;
     public String name;
-    public double standing_credits;
+    public int standing_credits;
     public String photo_link;
 
     public ArrayList<Post> recpost;

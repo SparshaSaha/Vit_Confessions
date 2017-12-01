@@ -8,8 +8,12 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.fourthstatelab.confession.R;
+import com.fourthstatelab.confession.Utils.Account;
+import com.fourthstatelab.confession.Utils.DataHolder;
 import com.fourthstatelab.confession.Utils.HttpRequest;
 import com.fourthstatelab.confession.Utils.Preference;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import static com.fourthstatelab.confession.Utils.Preference.EMAIL;
 import static com.fourthstatelab.confession.Utils.Preference.JOBHI_KEY;
@@ -52,6 +56,8 @@ public class SplashScreen extends AppCompatActivity {
                     @Override
                     public void OnResponse(String response) {
                         if(response!=null && response.equals("0")!=true){
+                            DataHolder.account=new Gson().fromJson(response.toString(),new TypeToken<Account>(){}.getType());
+
                             startActivity(new Intent(SplashScreen.this,Dashboard.class));
                             finish();
                         }

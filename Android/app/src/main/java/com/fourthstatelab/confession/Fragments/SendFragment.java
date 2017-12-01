@@ -13,6 +13,7 @@ import android.widget.ListView;
 
 import com.fourthstatelab.confession.R;
 import com.fourthstatelab.confession.Utils.Account;
+import com.fourthstatelab.confession.Utils.DataHolder;
 import com.fourthstatelab.confession.Utils.Preference;
 import com.fourthstatelab.confession.List_Adapters.SentPostAdapter;
 import com.google.gson.Gson;
@@ -75,17 +76,13 @@ public class SendFragment extends Fragment {
         newpost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Create AlertDialog
+                
             }
         });
 
 
         lis=(ListView) v.findViewById(R.id.listview);
-        Account account;
-        account=new Gson().fromJson(getActivity().getSharedPreferences("pass",Context.MODE_PRIVATE).getString("profile_json",""),new TypeToken<Account>(){}.getType());
-
-
-        SentPostAdapter sp=new SentPostAdapter(getActivity(),account.senpost);
+        SentPostAdapter sp=new SentPostAdapter(getActivity(), DataHolder.account.senpost);
         lis.setAdapter(sp);
         return v;
     }

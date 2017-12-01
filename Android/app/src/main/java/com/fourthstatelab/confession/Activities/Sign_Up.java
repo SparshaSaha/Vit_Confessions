@@ -12,8 +12,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.fourthstatelab.confession.R;
+import com.fourthstatelab.confession.Utils.Account;
+import com.fourthstatelab.confession.Utils.DataHolder;
 import com.fourthstatelab.confession.Utils.HttpRequest;
 import com.fourthstatelab.confession.Utils.Preference;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import static com.fourthstatelab.confession.Utils.Preference.EMAIL;
 import static com.fourthstatelab.confession.Utils.Preference.PASSWORD;
@@ -43,13 +47,15 @@ EditText email,password;
                             .sendRequest(new HttpRequest.OnResponseListener() {
                                 @Override
                                 public void OnResponse(String response) {
-                                    if(response.equals("0")==false){
+                                    if(!response.equals("0")){
                                         getSharedPreferences("pass",Context.MODE_PRIVATE).edit().putString("email",email.getText().toString()).apply();
                                         getSharedPreferences("pass", Context.MODE_PRIVATE).edit().putString("password",password.getText().toString()).apply();
 
                                         Log.d("profile_json",response.toString());
 
                                         getSharedPreferences("pass",Context.MODE_PRIVATE).edit().putString("profile_json",response.toString()).apply();
+
+                                      DataHolder.account=new Gson().fromJson(response.toString(),new TypeToken<Account>(){}.getType());
 
                                         startActivity(new Intent(Sign_Up.this,Dashboard.class));
                                         finish();
