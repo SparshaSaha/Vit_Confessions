@@ -77,6 +77,11 @@ public class ProfileFragment extends Fragment {
       return view;
     }
 
+    public static void update_credits_to_server()
+    {
+      
+    }
+
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {

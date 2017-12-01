@@ -24,6 +24,18 @@ module.exports= function(app,mongo){
 
   });
 
+//Update credits for a user
+app.get("update_credits",(req,res)=>{
+      User.update({email:req.query.email},{$set:{standing_credits:req.query.credits}},function(err,resp1){
+        if(err)
+        res.send("0");
+        else {
+          res.send("1");
+        }
+      });
+  });
+
+
 
 //Sign in user
 app.get("/signin",(req,res)=>{
