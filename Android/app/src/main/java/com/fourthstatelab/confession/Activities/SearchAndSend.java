@@ -71,8 +71,10 @@ Button searchbutton;
             .sendRequest(new HttpRequest.OnResponseListener() {
               @Override
               public void OnResponse(String response) {
+                if(!response.equals("0"))
                send_text_confession(response);
-                Toast.makeText(SearchAndSend.this, response, Toast.LENGTH_SHORT).show();
+                else
+                  Toast.makeText(SearchAndSend.this, "User not found", Toast.LENGTH_SHORT).show();
 
               }
             });
