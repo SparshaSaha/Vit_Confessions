@@ -66,8 +66,8 @@ Button searchbutton;
     sendbutton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        String destination=searchbar.getText().toString();
-        final HttpRequest getemail=new HttpRequest(getApplicationContext(),"/getemail").addParam("parms",destination)
+        final String destination=searchbar.getText().toString();
+        final HttpRequest getemail=new HttpRequest(getApplicationContext(),"/getmail").addParam("parms",destination)
             .sendRequest(new HttpRequest.OnResponseListener() {
               @Override
               public void OnResponse(String response) {

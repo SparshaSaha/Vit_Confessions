@@ -241,7 +241,7 @@ app.get("/getmail",(req,res)=>{
                 }
                 else {
                   var z=resp[0].email;
-                  res.json(z);
+                  res.send(z);
                 }
 
               });
@@ -249,20 +249,20 @@ app.get("/getmail",(req,res)=>{
 
             else {
               var z=resp[0].email;
-              res.json(z);            }
+              res.send(z);            }
           });
 
         }
 
         else {
           var z=resp[0].email;
-          res.json(z);        }
+          res.send(z);        }
       });
     }
 
     else {
       var z=resp[0].email;
-      res.json(z);    }
+      res.send(z);    }
       });
 });
 
