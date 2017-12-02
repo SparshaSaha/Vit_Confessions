@@ -248,21 +248,21 @@ app.get("/getmail",(req,res)=>{
             }
 
             else {
-              res.json(resp[0].email+"");
-            }
+              var z=resp[0].email;
+              res.json(z);            }
           });
 
         }
 
         else {
-          res.json(resp[0].email+"");
-        }
+          var z=resp[0].email;
+          res.json(z);        }
       });
     }
 
     else {
-      res.json(resp[0].email+"");
-    }
+      var z=resp[0].email;
+      res.json(z);    }
       });
 });
 
