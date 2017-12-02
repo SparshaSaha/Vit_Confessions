@@ -241,27 +241,27 @@ app.get("/getmail",(req,res)=>{
 
                 }
                 else {
-                  res.json(resp[0].email);
+                  res.json(resp[0].email+"");
                 }
 
               });
             }
 
             else {
-              res.json(resp[0].email);
+              res.json(resp[0].email+"");
             }
           });
 
         }
 
         else {
-          res.json(resp[0].email);
+          res.json(resp[0].email+"");
         }
       });
     }
 
     else {
-      res.json(resp[0].email);
+      res.json(resp[0].email+"");
     }
       });
 });
