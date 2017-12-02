@@ -217,4 +217,54 @@ app.get("/searchuser",(req,res)=>{
 });
 
 
+
+
+
+
+//Return email
+app.get("/getmail",(req,res)=>{
+  var z=1;
+  var x=req.query.parms;
+  User.find({name:new RegExp(x)},function(err,resp){
+    if(resp.length==0){
+
+      User.find({reg_no:new RegExp(x)},function(err,resp){
+        if(resp.length==0){
+
+          User.find({username:new RegExp(x)},function(err,resp){
+            if(resp.length==0){
+
+              User.find({email:new RegExp(x)},function(err,resp){
+                if(resp.length==0)
+                {
+                  res.send("0");
+
+                }
+                else {
+                  res.send(resp[0].email);
+                }
+
+              });
+            }
+
+            else {
+              res.send(resp[0].email);
+            }
+          });
+
+        }
+
+        else {
+          res.send(resp[0].email);
+        }
+      });
+    }
+
+    else {
+      res.send(resp[0].email);
+    }
+      });
+});
+
+
 }

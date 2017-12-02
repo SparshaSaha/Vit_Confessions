@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.fourthstatelab.confession.List_Adapters.SearchPostAdapter;
 import com.fourthstatelab.confession.R;
+import com.fourthstatelab.confession.Utils.DataHolder;
 import com.fourthstatelab.confession.Utils.HttpRequest;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -60,6 +61,40 @@ Button searchbutton;
             });
       }
     });
+
+    sendbutton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        String destination=searchbar.getText().toString();
+        final HttpRequest getemail=new HttpRequest(getApplicationContext(),"/getemail").addParam("parms",destination)
+            .sendRequest(new HttpRequest.OnResponseListener() {
+              @Override
+              public void OnResponse(String response) {
+               send_text_confession(response);
+              }
+            });
+
+
+      }
+    });
+  }
+
+  public void send_text_confession(String send)
+  {
+    HttpRequest senddata=new HttpRequest(getApplicationContext(),"/send")
+        .addParam("tomail",send)
+        .addParam("frommail", DataHolder.account.email)
+        .addParam("message",message.getText().toString())
+        .addParam("date","12/12/2017")
+        .addParam("time","12:00 PM")
+        .sendRequest(new HttpRequest.OnResponseListener() {
+          @Override
+          public void OnResponse(String response) {
+            if(response.equals("1"))
+            Toast.makeText(SearchAndSend.this, "Message has been sent", Toast.LENGTH_SHORT).show();
+          }
+          
+        });
   }
 
   public void set_destination(String z)
