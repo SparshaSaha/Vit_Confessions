@@ -36,6 +36,7 @@ Button searchbutton;
 
     sendbutton=(Button)findViewById(R.id.sendbutton);
     message=(EditText)findViewById(R.id.sendtext);
+    Toast.makeText(this, ""+DataHolder.account.email, Toast.LENGTH_SHORT).show();
 
     searchbutton.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -71,6 +72,8 @@ Button searchbutton;
               @Override
               public void OnResponse(String response) {
                send_text_confession(response);
+                Toast.makeText(SearchAndSend.this, response, Toast.LENGTH_SHORT).show();
+
               }
             });
 
@@ -92,8 +95,9 @@ Button searchbutton;
           public void OnResponse(String response) {
             if(response.equals("1"))
             Toast.makeText(SearchAndSend.this, "Message has been sent", Toast.LENGTH_SHORT).show();
+            finish();
           }
-          
+
         });
   }
 
