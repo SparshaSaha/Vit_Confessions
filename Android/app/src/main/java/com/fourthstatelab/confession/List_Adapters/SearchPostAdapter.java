@@ -50,6 +50,7 @@ public class SearchPostAdapter extends BaseAdapter{
 
     TextView name=(TextView)view1.findViewById(R.id.datarec);
 
+
     name.setText(list.get(i));
 
     return view1;

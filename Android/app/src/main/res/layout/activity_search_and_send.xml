@@ -33,8 +33,31 @@
     <ListView
         android:id="@+id/serachlistview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="130dp"
         android:layout_alignStart="@+id/searchbox"
         android:layout_below="@+id/searchbutton"
         android:layout_toStartOf="@+id/searchbutton"/>
+
+    <EditText
+        android:id="@+id/sendtext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/serachlistview"
+        android:layout_alignStart="@+id/serachlistview"
+        android:layout_below="@+id/serachlistview"
+        android:layout_marginTop="50dp"
+        android:ems="10"
+        android:hint="Enter message to send"
+        android:inputType="textMultiLine"/>
+
+    <Button
+        android:id="@+id/sendbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/sendtext"
+        android:layout_below="@+id/sendtext"
+        android:layout_marginEnd="73dp"
+        android:layout_marginTop="35dp"
+        android:elevation="24dp"
+        android:text="Send"/>
 </RelativeLayout>
