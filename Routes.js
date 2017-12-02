@@ -223,26 +223,25 @@ app.get("/searchuser",(req,res)=>{
 
 //Return email
 app.get("/getmail",(req,res)=>{
-  var z=1;
   var x=req.query.parms;
-  User.find({name:new RegExp(x)},function(err,resp){
+  User.find({name:x},function(err,resp){
     if(resp.length==0){
 
-      User.find({reg_no:new RegExp(x)},function(err,resp){
+      User.find({reg_no:x},function(err,resp){
         if(resp.length==0){
 
-          User.find({username:new RegExp(x)},function(err,resp){
+          User.find({username:x},function(err,resp){
             if(resp.length==0){
 
-              User.find({email:new RegExp(x)},function(err,resp){
+              User.find({email:x},function(err,resp){
                 if(resp.length==0)
                 {
                   res.send("0");
 
                 }
                 else {
-                  console.log(resp[0].email+"here");
-                  res.json(resp[0].email+"");
+                  var z=resp[0].email;
+                  res.json(z);
                 }
 
               });
