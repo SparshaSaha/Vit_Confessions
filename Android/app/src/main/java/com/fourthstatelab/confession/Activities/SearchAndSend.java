@@ -85,7 +85,7 @@ Button searchbutton;
   public void send_text_confession(String send)
   {
     HttpRequest senddata=new HttpRequest(getApplicationContext(),"/send")
-        .addParam("tomail",send)
+        .addParam("tomail",send.toString().trim())
         .addParam("frommail", DataHolder.account.email)
         .addParam("message",message.getText().toString())
         .addParam("date","12/12/2017")
