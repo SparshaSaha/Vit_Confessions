@@ -241,7 +241,7 @@ app.get("/getmail",(req,res)=>{
 
                 }
                 else {
-                  Log(resp[0].email);
+                  console.log(resp[0].email+"here");
                   res.json(resp[0].email+"");
                 }
 
