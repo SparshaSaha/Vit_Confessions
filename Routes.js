@@ -18,7 +18,7 @@ module.exports= function(app,mongo){
   socketio.listen(server).on('connection', function (socket) {
       socket.on('message', function (msg) {
           console.log('Message Received: ', msg);
-          socket.broadcast.emit('message', msg);
+          socket.emit('message',1123, msg);
       });
   });
 

@@ -16,12 +16,11 @@
 
                 $('#incomingChatMessages').append($('<li>Connected</li>'));
 
-                iosocket.on('message', function(message) {
+                iosocket.on('message',1123, function(message) {
 
                     $('#incomingChatMessages').append($('<li></li>').text(message));
 
                 });
-
                 iosocket.on('disconnect', function() {
 
                     $('#incomingChatMessages').append('<li>Disconnected</li>');
