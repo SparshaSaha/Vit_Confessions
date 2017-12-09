@@ -22,7 +22,6 @@ module.exports= function(app,mongo){
       });
   });
 
-// TODO: Chnage sign in sent parameters and configure in android accordingly
 //Sign up user
   app.get("/signup",(req,res)=>{
     var user=new User({
