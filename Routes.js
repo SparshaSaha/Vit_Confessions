@@ -1,7 +1,26 @@
 const User=require("./Models/Account");
 const Message=require("./Models/Message");
+var fs = require('fs');
+  var http = require('http');
+  var socketio = require('socket.io');
 
 module.exports= function(app,mongo){
+  sequenceNumber=new Map();
+
+  var server = http.createServer(function(req, res) {
+    res.writeHead(200, { 'Content-type': 'text/html'});
+    res.end(fs.readFileSync(__dirname + '/index.html'));
+
+  }).listen(8085, function() {
+      console.log('Listening at: http://localhost:8085');
+  });
+
+  socketio.listen(server).on('connection', function (socket) {
+      socket.on('message', function (msg) {
+          console.log('Message Received: ', msg);
+          socket.broadcast.emit('message', msg);
+      });
+  });
 
 // TODO: Chnage sign in sent parameters and configure in android accordingly
 //Sign up user
