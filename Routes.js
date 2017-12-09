@@ -22,6 +22,50 @@ module.exports= function(app,mongo){
       });
   });
 
+  socketio.listen(server).on('connection',function(socket){
+    socket.on('send',function(dataJson){
+
+      User.update({email:req.query.tomail},{$push:{
+        recpost:
+        {
+          for_user:req.query.tomail,
+          from_user:req.query.frommail,
+          message:req.query.message,
+          date:req.query.date,
+          time:req.query.time
+        }
+      }},function(err){
+        if(err){
+        throw err;
+        socket.emit()
+      }
+      });
+
+    //Update sentmessagefor the sender
+      User.update({email:req.query.frommail},{$push:{
+        senpost:
+        {
+          for_user:req.query.tomail,
+          from_user:req.query.frommail,
+          message:req.query.message,
+          date:req.query.date,
+          time:req.query.time
+        }
+      }
+      },function(err){
+        if(err)
+        throw err;
+        else {
+          res.send("1");
+        }
+      });
+
+
+    });
+    });
+  });
+
+
 //Sign up user
   app.get("/signup",(req,res)=>{
     var user=new User({
