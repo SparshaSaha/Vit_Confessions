@@ -22,13 +22,14 @@ module.exports= function(app,mongo){
       });
   });
 
+//Send socket function
   socketio.listen(server).on('connection',function(socket){
     socket.on('send',function(dataJson){
 
       var id=dataJson.id;
       var data=dataJson.data;
 
-      
+
       User.update({email:data.tomail},{$push:{
         recpost:
         {
