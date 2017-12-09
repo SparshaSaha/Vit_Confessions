@@ -25,43 +25,44 @@ module.exports= function(app,mongo){
   socketio.listen(server).on('connection',function(socket){
     socket.on('send',function(dataJson){
 
-      User.update({email:req.query.tomail},{$push:{
+      var id=dataJson.id;
+      var data=dataJson.data;
+
+      
+      User.update({email:data.tomail},{$push:{
         recpost:
         {
-          for_user:req.query.tomail,
-          from_user:req.query.frommail,
-          message:req.query.message,
-          date:req.query.date,
-          time:req.query.time
+          for_user:data.tomail,
+          from_user:data.frommail,
+          message:data.message,
+          date:data.date,
+          time:data.time
         }
       }},function(err){
         if(err){
         throw err;
-        socket.emit()
+        socket.emit('send_reply',1123, "error");
       }
       });
 
     //Update sentmessagefor the sender
-      User.update({email:req.query.frommail},{$push:{
+      User.update({email:data.frommail},{$push:{
         senpost:
         {
-          for_user:req.query.tomail,
-          from_user:req.query.frommail,
-          message:req.query.message,
-          date:req.query.date,
-          time:req.query.time
+          for_user:data.tomail,
+          from_user:data.frommail,
+          message:data.message,
+          date:data.date,
+          time:data.time
         }
       }
       },function(err){
         if(err)
         throw err;
         else {
-          res.send("1");
+
         }
       });
-
-
-    });
     });
   });
 
