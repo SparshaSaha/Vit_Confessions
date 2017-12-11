@@ -7,7 +7,8 @@ const port=process.env.PORT || 8080;
 
 
 module.exports= function(mongo){
-  sequenceNumber=new Map();
+  onlinemap=new Map();
+  revonlinemap=new Map();
 
   var server = http.createServer(function(req, res) {
     res.writeHead(200, { 'Content-type': 'text/html'});
@@ -18,17 +19,28 @@ module.exports= function(mongo){
   });
 
   socketio.listen(server).on('connection', function (socket) {
+
+    socket.on('register', function(reg_no){
+      onlinemap[reg_no]=socket;
+      revonlinemap[socket]=reg_no;
+    });
+
+    socket.on('disconnect',function(){
+      onlinemap.delete(revonlinemap[socket]);
+      revonlinemap.delete(socket);
+    });
+
+
       socket.on('message', function (msg) {
 
           console.log('Message Received: ', msg);
-          socket.emit('message', 1123, msg);
+          socket.emit('message', msg);
       });
 
       //Send socket function
         socket.on('send',function(dataJson){
 
-          var id=dataJson.id;
-          var data=dataJson.data;
+          var data=dataJson;
 
           User.update({email:data.tomail},{$push:{
             recpost:
@@ -42,11 +54,11 @@ module.exports= function(mongo){
           }},function(err){
             if(err){
             throw err;
-            socket.emit('send_reply',id, "error");
+            socket.emit('send_reply', "error");
           }
           });
 
-          
+
 
         //Update sentmessage for the sender
           User.update({email:data.frommail},{$push:{
@@ -63,8 +75,8 @@ module.exports= function(mongo){
             if(err)
             throw err;
             else {
-              socket.emit('new_message',data.for_user, data);
-              socket.emit('send_reply',data.from_user, "successful");
+              socket.emit('new_message', data);
+              socket.emit('send_reply', "successful");
             }
           });
       });
@@ -73,8 +85,7 @@ module.exports= function(mongo){
 
     //Sign up user
       socket.on('signup',function(dataJson){
-        var id=dataJson.id;
-        var data=dataJson.data;
+        var data=dataJson;
         var user=new User({
           email:data.email,
           password:data.password,
@@ -87,9 +98,9 @@ module.exports= function(mongo){
         });
         user.save((err,res1)=>{
           if(err)
-          socket.emit('signup_reply', id, 'error');
+          socket.emit('signup_reply','error');
           else
-          socket.emit('signup_reply', id, 'successful');
+          socket.emit('signup_reply','successful');
         })
 
       });
@@ -98,13 +109,12 @@ module.exports= function(mongo){
 
       //Update credits for a user
       socket.on('update_credits',function(dataJson){
-        var id=dataJson.id;
-        var data=dataJson.id;
+        var data=dataJson;
             User.update({email:data.email},{$set:{standing_credits:data.credits}},function(err,resp1){
               if(err)
-              socket.emit('update_credits_reply', id,'error');
+              socket.emit('update_credits_reply','error');
               else {
-                socket.emit('update_credits_reply', id, 'successful');
+                socket.emit('update_credits_reply', 'successful');
               }
             });
         });
@@ -112,11 +122,10 @@ module.exports= function(mongo){
 
         //Sign in user
         socket.on('signin', function(dataJson){
-          var id=dataJson.id;
-          var data=dataJson.data;
+          var data=dataJson;
           User.find({email:data.email,password:data.password},function(err,resp){
             if(resp.length==0){
-              socket.emit('signin_reply', id, 'error');
+              socket.emit('signin_reply', 'error');
               }
               else {
 
@@ -143,18 +152,17 @@ module.exports= function(mongo){
 
         // Update profile pic link
         socket.on("updateprofilepic",(dataJson)=>{
-          var id=dataJson.id;
-          var data=dataJson.data;
+          var data=dataJson;
           User.find({email:data.email},(err,resp)=>{
             if(err)
-            socket.emit('updateprofilepic_reply', id, "error");
+            socket.emit('updateprofilepic_reply', "error");
             else {
               {
                 User.update({email:data.email},{$set:{photo_link:data.photo_link}},function(err,resp1){
                   if(err)
-                  socket.emit('updateprofilepic_reply', id, "error");
+                  socket.emit('updateprofilepic_reply', "error");
                   else {
-                    socket.emit('updateprofilepic_reply', id, "successful");
+                    socket.emit('updateprofilepic_reply', "successful");
                   }
                 });
               }
@@ -167,15 +175,14 @@ module.exports= function(mongo){
 
       //Get received post for an User
       socket.on("getreceivedpost",(dataJson)=>{
-        var id=dataJson.id;
-        var data=dataJson.data;
+        var data=dataJson;
           User.find({email:data.email},(err,resp)=>{
             if(!err){
               var temp=resp[0].recpost;
-              socket.emit("getreceivedpost_reply", id, JSON.stringify(temp));
+              socket.emit("getreceivedpost_reply", JSON.stringify(temp));
             }
             else {
-              socket.emit('getreceivedpost_reply', id, "error");
+              socket.emit('getreceivedpost_reply', "error");
             }
           });
         });
@@ -183,8 +190,7 @@ module.exports= function(mongo){
 
         //Search by Name or reg no. or email
         socket.on("searchuser",(dataJson)=>{
-          var id=dataJson.id;
-          var data=dataJson.data;
+          var data=dataJson;
           var z=1;
           var x=data.parms;
           User.find({name:new RegExp(x)},function(err,resp){
@@ -199,7 +205,7 @@ module.exports= function(mongo){
                       User.find({email:new RegExp(x)},function(err,resp){
                         if(resp.length==0)
                         {
-                          socket.emit('searchuser_reply', id, "error");
+                          socket.emit('searchuser_reply', "error");
 
                         }
                         else {
@@ -208,8 +214,8 @@ module.exports= function(mongo){
                           {
                             temp.push(resp[i].email);
                           }
-                          socket.emit('searchuser_reply', id, temp);
 
+                          socket.emit('searchuser_reply', temp);
                           z=1;
                         }
 
@@ -222,7 +228,8 @@ module.exports= function(mongo){
                       {
                         temp.push(resp[i].username);
                       }
-                      socket.emit('searchuser_reply', id, temp);
+
+                      socket.emit('searchuser_reply', temp);
                       z=1;
                     }
                   });
@@ -235,7 +242,9 @@ module.exports= function(mongo){
                   {
                     temp.push(resp[i].reg_no);
                   }
-                  socket.emit('searchuser_reply', id, temp);
+                  socket.broadcast.emit('searchuser_reply',temp);
+                  console.log(temp);
+
                   z=1;
                 }
               });
@@ -247,7 +256,7 @@ module.exports= function(mongo){
               {
                 temp.push(resp[i].name);
               }
-              socket.emit('searchuser_reply', id, temp);
+              socket.emit('searchuser_reply',temp);
               z=1;
             }
               });
@@ -259,9 +268,8 @@ module.exports= function(mongo){
 
         //Return email
         socket.on("getmail",(dataJson)=>{
-          var id=dataJson.id;
-          var data=dataJson.data;
-          var x=req.query.parms;
+          var data=dataJson;
+          var x=data.parms;
           User.find({name:x},function(err,resp){
             if(resp.length==0){
 
@@ -274,12 +282,12 @@ module.exports= function(mongo){
                       User.find({email:x},function(err,resp){
                         if(resp.length==0)
                         {
-                          socket.emit('getmail_reply', id, "error");
+                          socket.emit('getmail_reply', "error");
 
                         }
                         else {
                           var z=resp[0].email;
-                          socket.emit('getmail_reply', id ,z);
+                          socket.emit('getmail_reply' ,z);
                         }
 
                       });
@@ -287,7 +295,7 @@ module.exports= function(mongo){
 
                     else {
                       var z=resp[0].email;
-                      socket.emit('getmail_reply', id ,z);
+                      socket.emit('getmail_reply',z);
             }
                   });
 
@@ -295,14 +303,14 @@ module.exports= function(mongo){
 
                 else {
                   var z=resp[0].email;
-                  socket.emit('getmail_reply', id ,z);
+                  socket.emit('getmail_reply',z);
         }
               });
             }
 
             else {
               var z=resp[0].email;
-              socket.emit('getmail_reply', id ,z);
+              socket.emit('getmail_reply',z);
     }
               });
         });

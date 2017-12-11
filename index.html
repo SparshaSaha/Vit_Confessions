@@ -10,13 +10,13 @@
 
         $(function(){
 
-            var iosocket = io.connect();
+            var iosocket = io.connect("15BCE1067");
 
             iosocket.on('connect', function () {
 
                 $('#incomingChatMessages').append($('<li>Connected</li>'));
 
-                iosocket.on('message', 1123 ,function(message) {
+                iosocket.on('message',function(message) {
 
                     $('#incomingChatMessages').append($('<li></li>').text(message));
 
