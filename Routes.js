@@ -46,6 +46,8 @@ module.exports= function(mongo){
           }
           });
 
+          
+
         //Update sentmessage for the sender
           User.update({email:data.frommail},{$push:{
             senpost:
@@ -91,6 +93,8 @@ module.exports= function(mongo){
         })
 
       });
+
+
 
       //Update credits for a user
       socket.on('update_credits',function(dataJson){

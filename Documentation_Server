@@ -1,0 +1,11 @@
+Server functions along with their return data
+
+When sending data through sockets basic structure of dataJson
+
+dataJson:
+{
+id: "Registration number of the user"
+data: "JSON string of whatever data has to be sent"
+};
+
+1>
