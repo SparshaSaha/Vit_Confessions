@@ -26,3 +26,21 @@ socket.emit('send_reply',data.from_user, "successful");
 socket.emit('send_reply',data.from_user, "error");
 
 2>.
+structure:
+socket.on('signup',function(dataJson)
+
+dataJson.data:
+{
+data.email,
+data.password,
+data.reg_no,
+data.username,
+data.name,
+photo_link:data.photo_link
+}
+
+return:
+socket.emit('signup_reply', id, 'error');
+socket.emit('signup_reply', id, 'successful');
+
+3>.
