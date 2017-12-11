@@ -68,3 +68,17 @@ temp:
 };
 socket.emit('signin_reply' ,id, JSON.stringify(temp));
 socket.emit('signin_reply', id, 'error');
+
+
+4>.
+structure:
+socket.on("getreceivedpost",(dataJson)
+
+dataJson.data:
+{
+email
+};
+
+return:
+socket.emit("getreceivedpost_reply", id, JSON.stringify(temp));
+socket.emit('getreceivedpost_reply', id, "error");
