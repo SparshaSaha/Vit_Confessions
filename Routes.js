@@ -106,6 +106,34 @@ module.exports= function(mongo){
         });
 
 
+        //Sign in user
+        socket.on('signin', function(dataJson){
+          var id=dataJson.id;
+          var data=dataJson.data;
+          User.find({email:data.email,password:data.password},function(err,resp){
+            if(resp.length==0){
+              socket.emit('signin_reply', id, 'error');
+              }
+              else {
+
+                var temp={
+                  email:resp[0].email,
+                  password:resp[0].password,
+                  reg_no:resp[0].reg_no,
+                  username:resp[0].username,
+                  recpost:resp[0].recpost,
+                  senpost:resp[0].senpost,
+                  name:resp[0].name,
+                  standing_credits:resp[0].standing_credits,
+                  photo_link:resp[0].photo_link
+                };
+
+                socket.emit('signin_reply' ,id, JSON.stringify(temp));
+              }
+          });
+        });
+
+
 
   });
 
@@ -115,30 +143,7 @@ module.exports= function(mongo){
 
 
 
-//Sign in user
-app.get("/signin",(req,res)=>{
-  User.find({email:req.query.email,password:req.query.password},function(err,resp){
-    if(resp.length==0){
-      res.send('0');
-      }
-      else {
 
-        var temp={
-          email:resp[0].email,
-          password:resp[0].password,
-          reg_no:resp[0].reg_no,
-          username:resp[0].username,
-          recpost:resp[0].recpost,
-          senpost:resp[0].senpost,
-          name:resp[0].name,
-          standing_credits:resp[0].standing_credits,
-          photo_link:resp[0].photo_link
-        };
-
-        res.send(JSON.stringify(temp));
-      }
-  });
-});
 
 
 
