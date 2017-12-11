@@ -135,49 +135,65 @@ module.exports= function(mongo){
 
 
 
-  });
 
 
-
-
-
-
-
-
-
-
-
-// Update profile pic link
-app.get("/updateprofilepic",(req,res)=>{
-  User.find({email:req.query.email},(err,resp)=>{
-    if(err)
-    res.send("0");
-    else {
-      {
-        User.update({email:req.query.email},{$set:{photo_link:req.query.photo_link}},function(err,resp1){
-          if(err)
-          res.send("0");
-          else {
-            res.send("1");
-          }
+        // Update profile pic link
+        socket.on("updateprofilepic",(dataJson)=>{
+          var id=dataJson.id;
+          var data=dataJson.data;
+          User.find({email:data.email},(err,resp)=>{
+            if(err)
+            socket.emit('updateprofilepic_reply', id, "error");
+            else {
+              {
+                User.update({email:data.email},{$set:{photo_link:data.photo_link}},function(err,resp1){
+                  if(err)
+                  socket.emit('updateprofilepic_reply', id, "error");
+                  else {
+                    socket.emit('updateprofilepic_reply', id, "successful");
+                  }
+                });
+              }
+            }
+          });
         });
-      }
-    }
-  });
-});
 
 
-app.get("/getreceivedpost",(req,res)=>{
-  User.find({email:req.query.email},(err,resp)=>{
-    if(!err){
-      var temp=resp[0].recpost;
-      res.send(JSON.stringify(temp));
-    }
-    else {
-      res.send("0");
-    }
+
+
+
+      socket.on("getreceivedpost",(dataJson)=>{
+        var id=dataJson.id;
+        var data=dataJson.data;
+          User.find({email:data.email},(err,resp)=>{
+            if(!err){
+              var temp=resp[0].recpost;
+              socket.emit("getreceivedpost_reply", id, JSON.stringify(temp));
+            }
+            else {
+              socket.emit('getreceivedpost_reply', id, "error");
+            }
+          });
+        });
+
+
+
   });
-});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
