@@ -177,103 +177,63 @@ module.exports= function(mongo){
         });
 
 
-
-  });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//Send a new post
-app.get("/send",(req,res)=>{
-  //Update for user for whom the message is meant for
-  User.update({email:req.query.tomail},{$push:{
-    recpost:
-    {
-      for_user:req.query.tomail,
-      from_user:req.query.frommail,
-      message:req.query.message,
-      date:req.query.date,
-      time:req.query.time
-    }
-  }},function(err){
-    if(err){
-    throw err;
-    res.send("0");
-  }
-  });
-
-//Update sentmessagefor the sender
-  User.update({email:req.query.frommail},{$push:{
-    senpost:
-    {
-      for_user:req.query.tomail,
-      from_user:req.query.frommail,
-      message:req.query.message,
-      date:req.query.date,
-      time:req.query.time
-    }
-  }
-  },function(err){
-    if(err)
-    throw err;
-    else {
-      res.send("1");
-    }
-  });
-
-
-});
-
-app.get("/seeall",(req,res)=>{
-  User.find(function(err,resp){
-    res.json(resp);
-  });
-});
-
-//Search by Name or reg no. or email
-app.get("/searchuser",(req,res)=>{
-  var z=1;
-  var x=req.query.parms;
-  User.find({name:new RegExp(x)},function(err,resp){
-    if(resp.length==0){
-
-      User.find({reg_no:new RegExp(x)},function(err,resp){
-        if(resp.length==0){
-
-          User.find({username:new RegExp(x)},function(err,resp){
+        //Search by Name or reg no. or email
+        socket.on("searchuser",(dataJson)=>{
+          var id=dataJson.id;
+          var data=dataJson.data;
+          var z=1;
+          var x=data.parms;
+          User.find({name:new RegExp(x)},function(err,resp){
             if(resp.length==0){
 
-              User.find({email:new RegExp(x)},function(err,resp){
-                if(resp.length==0)
-                {
-                  res.send("0");
+              User.find({reg_no:new RegExp(x)},function(err,resp){
+                if(resp.length==0){
+
+                  User.find({username:new RegExp(x)},function(err,resp){
+                    if(resp.length==0){
+
+                      User.find({email:new RegExp(x)},function(err,resp){
+                        if(resp.length==0)
+                        {
+                          socket.emit('searchuser_reply', id, "error");
+
+                        }
+                        else {
+                          var temp=new Array();
+                          for(i=0;i<resp.length;i++)
+                          {
+                            temp.push(resp[i].email);
+                          }
+                          socket.emit('searchuser_reply', id, temp);
+
+                          z=1;
+                        }
+
+                      });
+                    }
+
+                    else {
+                      var temp=new Array();
+                      for(i=0;i<resp.length;i++)
+                      {
+                        temp.push(resp[i].username);
+                      }
+                      socket.emit('searchuser_reply', id, temp);
+                      z=1;
+                    }
+                  });
 
                 }
+
                 else {
                   var temp=new Array();
                   for(i=0;i<resp.length;i++)
                   {
-                    temp.push(resp[i].email);
+                    temp.push(resp[i].reg_no);
                   }
-                  res.send(temp);
-
+                  socket.emit('searchuser_reply', id, temp);
                   z=1;
                 }
-
               });
             }
 
@@ -281,88 +241,67 @@ app.get("/searchuser",(req,res)=>{
               var temp=new Array();
               for(i=0;i<resp.length;i++)
               {
-                temp.push(resp[i].username);
+                temp.push(resp[i].name);
               }
-              res.send(temp);
+              socket.emit('searchuser_reply', id, temp);
               z=1;
             }
-          });
-
-        }
-
-        else {
-          var temp=new Array();
-          for(i=0;i<resp.length;i++)
-          {
-            temp.push(resp[i].reg_no);
-          }
-          res.send(temp);
-          z=1;
-        }
-      });
-    }
-
-    else {
-      var temp=new Array();
-      for(i=0;i<resp.length;i++)
-      {
-        temp.push(resp[i].name);
-      }
-      res.send(temp);
-      z=1;
-    }
-      });
-});
+              });
+        });
 
 
 
 
 
-
-//Return email
-app.get("/getmail",(req,res)=>{
-  var x=req.query.parms;
-  User.find({name:x},function(err,resp){
-    if(resp.length==0){
-
-      User.find({reg_no:x},function(err,resp){
-        if(resp.length==0){
-
-          User.find({username:x},function(err,resp){
+        //Return email
+        socket.on("getmail",(dataJson)=>{
+          var id=dataJson.id;
+          var data=dataJson.data;
+          var x=req.query.parms;
+          User.find({name:x},function(err,resp){
             if(resp.length==0){
 
-              User.find({email:x},function(err,resp){
-                if(resp.length==0)
-                {
-                  res.send("0");
+              User.find({reg_no:x},function(err,resp){
+                if(resp.length==0){
+
+                  User.find({username:x},function(err,resp){
+                    if(resp.length==0){
+
+                      User.find({email:x},function(err,resp){
+                        if(resp.length==0)
+                        {
+                          socket.emit('getmail_reply', id, "error");
+
+                        }
+                        else {
+                          var z=resp[0].email;
+                          socket.emit('getmail_reply', id ,z);
+                        }
+
+                      });
+                    }
+
+                    else {
+                      var z=resp[0].email;
+                      socket.emit('getmail_reply', id ,z);
+            }
+                  });
 
                 }
+
                 else {
                   var z=resp[0].email;
-                  res.send(z);
-                }
-
+                  socket.emit('getmail_reply', id ,z);
+        }
               });
             }
 
             else {
               var z=resp[0].email;
-              res.send(z);            }
-          });
-
-        }
-
-        else {
-          var z=resp[0].email;
-          res.send(z);        }
-      });
+              socket.emit('getmail_reply', id ,z);
     }
-
-    else {
-      var z=resp[0].email;
-      res.send(z);    }
-      });
-});
-
+              });
+        });
+  });
 
 }
