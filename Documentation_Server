@@ -80,5 +80,18 @@ email
 };
 
 return:
-socket.emit("getreceivedpost_reply", id, JSON.stringify(temp));
+socket.emit("getreceivedpost_reply", id, JSON.stringify(recpost));
 socket.emit('getreceivedpost_reply', id, "error");
+
+5>.
+structure:
+socket.on("searchuser",(dataJson)=>
+
+dataJson.data:
+{
+parms: email || reg_no || username || name
+};
+temp: array of users
+return:
+socket.emit('searchuser_reply', id, "error");
+socket.emit('searchuser_reply', id, temp);
