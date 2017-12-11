@@ -1,93 +1,100 @@
 const User=require("./Models/Account");
 const Message=require("./Models/Message");
 var fs = require('fs');
-  var http = require('http');
-  var socketio = require('socket.io');
+var http = require('http');
+var socketio = require('socket.io');
+const port=process.env.PORT || 8080;
 
-module.exports= function(app,mongo){
+
+module.exports= function(mongo){
   sequenceNumber=new Map();
 
   var server = http.createServer(function(req, res) {
     res.writeHead(200, { 'Content-type': 'text/html'});
     res.end(fs.readFileSync(__dirname + '/index.html'));
 
-  }).listen(8085, function() {
-      console.log('Listening at: http://localhost:8085');
+  }).listen(port, function() {
+      console.log('Listening at: http://localhost:'+port);
   });
 
   socketio.listen(server).on('connection', function (socket) {
       socket.on('message', function (msg) {
+
           console.log('Message Received: ', msg);
-          socket.emit('message',1123, msg);
-      });
-  });
-
-//Send socket function
-  socketio.listen(server).on('connection',function(socket){
-    socket.on('send',function(dataJson){
-
-      var id=dataJson.id;
-      var data=dataJson.data;
-
-
-      User.update({email:data.tomail},{$push:{
-        recpost:
-        {
-          for_user:data.tomail,
-          from_user:data.frommail,
-          message:data.message,
-          date:data.date,
-          time:data.time
-        }
-      }},function(err){
-        if(err){
-        throw err;
-        socket.emit('send_reply',1123, "error");
-      }
+          socket.emit('message', 1123, msg);
       });
 
-    //Update sentmessagefor the sender
-      User.update({email:data.frommail},{$push:{
-        senpost:
-        {
-          for_user:data.tomail,
-          from_user:data.frommail,
-          message:data.message,
-          date:data.date,
-          time:data.time
-        }
-      }
-      },function(err){
-        if(err)
-        throw err;
-        else {
+      //Send socket function
+        socket.on('send',function(dataJson){
 
-        }
+          var id=dataJson.id;
+          var data=dataJson.data;
+
+          User.update({email:data.tomail},{$push:{
+            recpost:
+            {
+              for_user:data.tomail,
+              from_user:data.frommail,
+              message:data.message,
+              date:data.date,
+              time:data.time
+            }
+          }},function(err){
+            if(err){
+            throw err;
+            socket.emit('send_reply',id, "error");
+          }
+          });
+
+        //Update sentmessagefor the sender
+          User.update({email:data.frommail},{$push:{
+            senpost:
+            {
+              for_user:data.tomail,
+              from_user:data.frommail,
+              message:data.message,
+              date:data.date,
+              time:data.time
+            }
+          }
+          },function(err){
+            if(err)
+            throw err;
+            else {
+              socket.emit('new_message',data.for_user, data);
+              socket.emit('send_reply',data.from_user, "successful");
+            }
+          });
       });
-    });
+
+
+
+    //Sign up user
+      app.get("/signup",(req,res)=>{
+        var user=new User({
+          email:req.query.email,
+          password:req.query.password,
+          reg_no:req.query.reg_no,
+          username:req.query.username,
+          name:req.query.name,
+          standing_credits:0,
+          photo_link:req.query.photo_link
+
+        });
+        user.save((err,res1)=>{
+          if(err)
+          res.send("0");
+          else
+          res.json("1");
+        })
+
+      });
+
+
+
   });
 
 
-//Sign up user
-  app.get("/signup",(req,res)=>{
-    var user=new User({
-      email:req.query.email,
-      password:req.query.password,
-      reg_no:req.query.reg_no,
-      username:req.query.username,
-      name:req.query.name,
-      standing_credits:0,
-      photo_link:req.query.photo_link
-
-    });
-    user.save((err,res1)=>{
-      if(err)
-      res.send("0");
-      else
-      res.json("1");
-    })
-
-  });
 
 //Update credits for a user
 app.get("update_credits",(req,res)=>{

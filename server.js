@@ -13,9 +13,7 @@ mongoose.connection.once('connected',function(){
   console.log("Connected to database");
 });
 
-const app=express();
 
 const port=process.env.PORT || 8080;
 
-require("./Routes")(app,db);
-app.listen(port);
+require("./Routes")(db);

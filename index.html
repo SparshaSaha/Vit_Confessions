@@ -16,7 +16,7 @@
 
                 $('#incomingChatMessages').append($('<li>Connected</li>'));
 
-                iosocket.on('message',1123, function(message) {
+                iosocket.on('message', 1123 ,function(message) {
 
                     $('#incomingChatMessages').append($('<li></li>').text(message));
 
