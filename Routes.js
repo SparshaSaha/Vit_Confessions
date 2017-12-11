@@ -46,7 +46,7 @@ module.exports= function(mongo){
           }
           });
 
-        //Update sentmessagefor the sender
+        //Update sentmessage for the sender
           User.update({email:data.frommail},{$push:{
             senpost:
             {
@@ -70,42 +70,48 @@ module.exports= function(mongo){
 
 
     //Sign up user
-      app.get("/signup",(req,res)=>{
+      socket.on('signup',function(dataJson){
+        var id=dataJson.id;
+        var data=dataJson.data;
         var user=new User({
-          email:req.query.email,
-          password:req.query.password,
-          reg_no:req.query.reg_no,
-          username:req.query.username,
-          name:req.query.name,
+          email:data.email,
+          password:data.password,
+          reg_no:data.reg_no,
+          username:data.username,
+          name:data.name,
           standing_credits:0,
-          photo_link:req.query.photo_link
+          photo_link:data.photo_link
 
         });
         user.save((err,res1)=>{
           if(err)
-          res.send("0");
+          socket.emit('signup_reply', id, 'error');
           else
-          res.json("1");
+          socket.emit('signup_reply', id, 'successful');
         })
 
       });
 
+      //Update credits for a user
+      socket.on('update_credits',function(dataJson){
+        var id=dataJson.id;
+        var data=dataJson.id;
+            User.update({email:data.email},{$set:{standing_credits:data.credits}},function(err,resp1){
+              if(err)
+              socket.emit('update_credits_reply', id,'error');
+              else {
+                socket.emit('update_credits_reply', id, 'successful');
+              }
+            });
+        });
+
 
 
   });
 
 
 
-//Update credits for a user
-app.get("update_credits",(req,res)=>{
-      User.update({email:req.query.email},{$set:{standing_credits:req.query.credits}},function(err,resp1){
-        if(err)
-        res.send("0");
-        else {
-          res.send("1");
-        }
-      });
-  });
+
 
 
 
