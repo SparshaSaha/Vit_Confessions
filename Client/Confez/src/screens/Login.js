@@ -1,10 +1,14 @@
 import React, {Component} from 'react';
 import {AppRegistry, View, StyleSheet, Text, Image, Dimensions, TouchableOpacity} from 'react-native';
-import {RkButton, RkText, RkTextInput} from 'react-native-ui-kitten';
+import {RkButton, RkText} from 'react-native-ui-kitten';
 import {Images, Colors} from '../R';
 import RoundedText from '../components/RoundedText'
 
 export default class Login extends Component{
+
+  static navigationOptions={
+    header:null
+  }
   constructor(props){
     super(props);
     this.state={

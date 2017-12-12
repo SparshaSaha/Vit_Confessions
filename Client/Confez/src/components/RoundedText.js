@@ -1,11 +1,11 @@
 import React,{Component} from 'react';
 import {AppRegistry, View, TextInput, StyleSheet} from 'react-native';
-
+import {Colors} from '../R'
 
 export default class RoundedText extends Component {
 
   render(){
-    const defaultStyle = {borderWidth:1,borderStyle:'solid',borderRadius:25, borderColor:'grey'};
+    const defaultStyle = {borderWidth:1,borderStyle:'solid',borderRadius:25, borderColor:Colors.primary};
     const custom =  this.props.style;
     const combined = StyleSheet.flatten([defaultStyle,custom]);
     return(
