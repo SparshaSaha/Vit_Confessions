@@ -22,8 +22,8 @@ dataJson.data:
 }
 
 return:
-socket.emit('send_reply',data.from_user, "successful");
-socket.emit('send_reply',data.from_user, "error");
+socket.emit('send_reply',"successful");
+socket.emit('send_reply',"error");
 
 2>.
 structure:
@@ -40,8 +40,8 @@ photo_link:data.photo_link
 }
 
 return:
-socket.emit('signup_reply', id, 'error');
-socket.emit('signup_reply', id, 'successful');
+socket.emit('signup_reply', 'error');
+socket.emit('signup_reply','successful');
 
 3>.
 structure:
@@ -66,8 +66,8 @@ temp:
   resp[0].standing_credits,
   resp[0].photo_link
 };
-socket.emit('signin_reply' ,id, JSON.stringify(temp));
-socket.emit('signin_reply', id, 'error');
+socket.emit('signin_reply' , JSON.stringify(temp));
+socket.emit('signin_reply', 'error');
 
 
 4>.
@@ -80,8 +80,8 @@ email
 };
 
 return:
-socket.emit("getreceivedpost_reply", id, JSON.stringify(recpost));
-socket.emit('getreceivedpost_reply', id, "error");
+socket.emit("getreceivedpost_reply",JSON.stringify(recpost));
+socket.emit('getreceivedpost_reply',"error");
 
 5>.
 structure:
@@ -93,5 +93,5 @@ parms: email || reg_no || username || name
 };
 temp: array of users
 return:
-socket.emit('searchuser_reply', id, "error");
-socket.emit('searchuser_reply', id, temp);
+socket.emit('searchuser_reply',"error");
+socket.emit('searchuser_reply',temp);
