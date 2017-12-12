@@ -142,7 +142,7 @@ module.exports= function(mongo){
                   photo_link:resp[0].photo_link
                 };
 
-                socket.emit('signin_reply',JSON.stringify(temp));
+                socket.emit('signin_reply',(temp));
               }
           });
         });
