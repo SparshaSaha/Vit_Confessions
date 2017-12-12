@@ -135,8 +135,6 @@ module.exports= function(mongo){
                   password:resp[0].password,
                   reg_no:resp[0].reg_no,
                   username:resp[0].username,
-                  recpost:resp[0].recpost,
-                  senpost:resp[0].senpost,
                   name:resp[0].name,
                   standing_credits:resp[0].standing_credits,
                   photo_link:resp[0].photo_link
