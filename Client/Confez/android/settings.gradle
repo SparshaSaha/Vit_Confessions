@@ -1,0 +1,3 @@
+rootProject.name = 'Confez'
+
+include ':app'
