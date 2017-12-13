@@ -5,7 +5,6 @@ var http = require('http');
 var socketio = require('socket.io');
 const port=process.env.PORT || 8080;
 
-
 module.exports= function(mongo){
   onlinemap=new Map();
   revonlinemap=new Map();
@@ -14,12 +13,25 @@ module.exports= function(mongo){
     res.writeHead(200, { 'Content-type': 'text/html'});
     res.end(fs.readFileSync(__dirname + '/index.html'));
 
-
   }).listen(port, function() {
       console.log('Listening at: http://localhost:'+port);
   });
 
   socketio.listen(server).on('connection', function (socket) {
+
+    socket.on('check_username',function(user){
+      User.find({username:user},(err,resp)=>{
+        if(err)
+        {
+          socket.emit('check_username_reply',"error");
+        }
+        else if(resp.length==0)
+        socket.emit('check_username_reply',"available");
+        else {
+          socket.emit('check_username_reply',"taken");
+        }
+      });
+    });
 
     socket.on('register', function(reg_no){
       onlinemap[reg_no]=socket;

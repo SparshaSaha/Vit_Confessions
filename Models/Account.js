@@ -6,6 +6,7 @@ var schema=new Schema({
   email:{ type:String ,required:true , unique:true},
   password:{type:String,required:true},
   reg_no:{type:String,required:true},
+  username:{type:String,required:true,unique:true},
   recpost:[{
     for_user:{type:String},
     from_user:{type:String},
