@@ -115,12 +115,13 @@ module.exports= function(mongo){
         });
         user.save((err,res1)=>{
           if(err){
+            throw(err);
           socket.emit('signup_reply','error');
-          console.log("RETURNED\n\n\n");
+          console.log("RETURNED1\n\n\n");
         }
           else{
           socket.emit('signup_reply','successful');
-          console.log("RETURNED\n\n\n");
+          console.log("RETURNED2\n\n\n");
         }
         })
 
@@ -161,7 +162,7 @@ module.exports= function(mongo){
                   photo_link:resp[0].photo_link
                 };
 
-                socket.emit('signin_reply' ,temp);
+                socket.emit('signin_reply' ,temp+"ko");
               }
           });
         });
