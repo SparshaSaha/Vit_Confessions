@@ -114,8 +114,10 @@ module.exports= function(mongo){
         user.save((err,res1)=>{
           if(err)
           socket.emit('signup_reply','error');
-          else
+          else{
           socket.emit('signup_reply','successful');
+          console.log("RETURNED\n\n\n");
+        }
         })
 
       });
