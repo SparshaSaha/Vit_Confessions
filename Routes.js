@@ -138,7 +138,7 @@ module.exports= function(mongo){
         //Sign in user
         socket.on('signin', function(dataJson){
           var data=dataJson;
-          console.log("from signin: "+dataJson);
+          console.log("from signin: "+JSON.stringify(dataJson));
           User.find({email:data.email,password:data.password},function(err,resp){
             if(resp.length==0){
               socket.emit('signin_reply', 'error');
