@@ -19,6 +19,8 @@ module.exports= function(mongo){
 
   socketio.listen(server).on('connection', function (socket) {
 
+    console.log("NEW USER ADDED\n\n");
+
     socket.on('check_username',function(user){
       User.find({username:user},(err,resp)=>{
         if(err)
@@ -99,7 +101,7 @@ module.exports= function(mongo){
     //Sign up user
       socket.on('signup',function(dataJson){
         var data=dataJson;
-        console.log("from signup: "+dataJson);
+        console.log("from signup: "+JSON.stringify(dataJson));
 
         var user=new User({
           email:data.email,
