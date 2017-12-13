@@ -11,8 +11,9 @@ module.exports= function(mongo){
   revonlinemap=new Map();
 
   var server = http.createServer(function(req, res) {
-    res.writeHead(200, { 'Content-type': 'text/html'});
+    /*res.writeHead(200, { 'Content-type': 'text/html'});
     res.end(fs.readFileSync(__dirname + '/index.html'));
+    */
 
   }).listen(port, function() {
       console.log('Listening at: http://localhost:'+port);
@@ -134,14 +135,12 @@ module.exports= function(mongo){
                   password:resp[0].password,
                   reg_no:resp[0].reg_no,
                   username:resp[0].username,
-                  recpost:resp[0].recpost,
-                  senpost:resp[0].senpost,
                   name:resp[0].name,
                   standing_credits:resp[0].standing_credits,
                   photo_link:resp[0].photo_link
                 };
 
-                socket.emit('signin_reply' ,id, JSON.stringify(temp));
+                socket.emit('signin_reply',(temp));
               }
           });
         });
