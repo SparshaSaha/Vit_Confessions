@@ -11,9 +11,6 @@ module.exports= function(mongo){
   revonlinemap=new Map();
 
   var server = http.createServer(function(req, res) {
-    /*res.writeHead(200, { 'Content-type': 'text/html'});
-    res.end(fs.readFileSync(__dirname + '/index.html'));
-    */
 
   }).listen(port, function() {
       console.log('Listening at: http://localhost:'+port);
