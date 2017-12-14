@@ -1,25 +1,38 @@
 const User=require("./Models/Account");
 const Message=require("./Models/Message");
+const Feed=require("./Models/Feed");
 var fs = require('fs');
 var http = require('http');
 var socketio = require('socket.io');
 const port=process.env.PORT || 8080;
-
 
 module.exports= function(mongo){
   onlinemap=new Map();
   revonlinemap=new Map();
 
   var server = http.createServer(function(req, res) {
-    /*res.writeHead(200, { 'Content-type': 'text/html'});
+    res.writeHead(200, { 'Content-type': 'text/html'});
     res.end(fs.readFileSync(__dirname + '/index.html'));
-    */
 
   }).listen(port, function() {
       console.log('Listening at: http://localhost:'+port);
   });
 
   socketio.listen(server).on('connection', function (socket) {
+
+    socket.on('check_username',function(user){
+      User.find({username:user},(err,resp)=>{
+        if(err)
+        {
+          socket.emit('check_username_reply',"error");
+        }
+        else if(resp.length==0)
+        socket.emit('check_username_reply',"available");
+        else {
+          socket.emit('check_username_reply',"taken");
+        }
+      });
+    });
 
     socket.on('register', function(reg_no){
       onlinemap[reg_no]=socket;
@@ -54,7 +67,6 @@ module.exports= function(mongo){
             }
           }},function(err){
             if(err){
-            throw err;
             socket.emit('send_reply', "error");
           }
           });
@@ -87,6 +99,8 @@ module.exports= function(mongo){
     //Sign up user
       socket.on('signup',function(dataJson){
         var data=dataJson;
+        console.log("from signup: "+JSON.stringify(dataJson));
+
         var user=new User({
           email:data.email,
           password:data.password,
@@ -98,10 +112,12 @@ module.exports= function(mongo){
 
         });
         user.save((err,res1)=>{
-          if(err)
+          if(err){
           socket.emit('signup_reply','error');
-          else
+        }
+          else{
           socket.emit('signup_reply','successful');
+        }
         })
 
       });
@@ -124,6 +140,7 @@ module.exports= function(mongo){
         //Sign in user
         socket.on('signin', function(dataJson){
           var data=dataJson;
+          console.log("from signin: "+JSON.stringify(dataJson));
           User.find({email:data.email,password:data.password},function(err,resp){
             if(resp.length==0){
               socket.emit('signin_reply', 'error');
@@ -140,7 +157,7 @@ module.exports= function(mongo){
                   photo_link:resp[0].photo_link
                 };
 
-                socket.emit('signin_reply',(temp));
+                socket.emit('signin_reply' ,temp+"ko");
               }
           });
         });
@@ -312,6 +329,29 @@ module.exports= function(mongo){
               socket.emit('getmail_reply',z);
     }
               });
+        });
+
+
+        //All feeds function
+        socket.on('addfeed',function(dataJson){
+          var data=dataJson;
+
+          var feed=new Feed({
+            user_reg:data.reg_no,
+            caption:data.caption,
+            photo_link:data.photo_link,
+            date:data.date,
+            time:data.time,
+            comments:[]
+          });
+          feed.save((err,resp)=>{
+            if(err)
+            socket.emit('addfeed_reply','error');
+            else {
+              socket.emit('addfeed_reply','successful');
+            }
+          });
+
         });
   });
 
