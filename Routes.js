@@ -68,7 +68,6 @@ module.exports= function(mongo){
             }
           }},function(err){
             if(err){
-            throw err;
             socket.emit('send_reply', "error");
           }
           });
