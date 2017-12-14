@@ -14,14 +14,15 @@ export default class RoundedText extends Component {
         placeholder={this.props.placeholder}
         style={StyleSheet.flatten([this.props.inputTextStyle,{flex:1,marginTop:6}])}
         secureTextEntry={this.props.secureTextEntry}
-        onChangeText={this.props.onChangeText}/>
+        onChangeText={this.props.onChangeText}>{this.props.children}</TextInput>
       </View>
     );
   }
 }
 
 const styles =  StyleSheet.create({
-  viewDefaultStyle : {borderWidth:1,
+  viewDefaultStyle : {
+    borderWidth:1,
     borderStyle:'solid',
     borderRadius:25,
     borderColor:Colors.primary,

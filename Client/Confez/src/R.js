@@ -1,10 +1,14 @@
 Images = {
   logo : require('./img/logo.png'),
-  logo1 : require('./img/logo1.png'),
-  logo2 : require('./img/logo2.png'),
   background : require('./img/back4.jpg'),
   username : require('./img/user.png'),
-  pass : require('./img/locked.png')
+  pass : require('./img/locked.png'),
+  back :  require('./img/back.png'),
+  finger : require('./img/id.png'),
+  mail : require('./img/mail.png'),
+  home :  require('./img/home.png'),
+  chats : require('./img/chats.png'),
+  settings : require('./img/settings.png')
 };
 
 Colors={
@@ -14,4 +18,8 @@ Colors={
   green : '#27ae61'
 };
 
-export {Images, Colors};
+Strings={
+  wsLink : 'https://vitconfession.herokuapp.com/'
+}
+
+export {Images, Colors, Strings};
