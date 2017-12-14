@@ -1,5 +1,6 @@
 const User=require("./Models/Account");
 const Message=require("./Models/Message");
+const Feed=require("./Models/Feed");
 var fs = require('fs');
 var http = require('http');
 var socketio = require('socket.io');
@@ -328,6 +329,29 @@ module.exports= function(mongo){
               socket.emit('getmail_reply',z);
     }
               });
+        });
+
+
+        //All feeds function
+        socket.on('addfeed',function(dataJson){
+          var data=dataJson;
+
+          var feed=new Feed({
+            user_reg:data.reg_no,
+            caption:data.caption,
+            photo_link:data.photo_link,
+            date:data.date,
+            time:data.time,
+            comments:[]
+          });
+          feed.save((err,resp)=>{
+            if(err)
+            socket.emit('addfeed_reply','error');
+            else {
+              socket.emit('addfeed_reply','successful');
+            }
+          });
+
         });
   });
 
