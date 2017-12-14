@@ -19,8 +19,6 @@ module.exports= function(mongo){
 
   socketio.listen(server).on('connection', function (socket) {
 
-    console.log("NEW USER ADDED\n\n");
-
     socket.on('check_username',function(user){
       User.find({username:user},(err,resp)=>{
         if(err)
@@ -115,11 +113,9 @@ module.exports= function(mongo){
         user.save((err,res1)=>{
           if(err){
           socket.emit('signup_reply','error');
-          console.log("RETURNED1\n\n\n");
         }
           else{
           socket.emit('signup_reply','successful');
-          console.log("RETURNED2\n\n\n");
         }
         })
 
