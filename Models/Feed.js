@@ -2,7 +2,7 @@ var mongoose=require('mongoose');
 var Schema=mongoose.Schema;
 
 var schema=new Schema({
-  id:{type:Number,required:true},
+  f_id:{type:Number,required:true},
   user_reg:{type:String,required:true},
   caption:{type:String,required:true},
   photo_link:{type:String,required:true},

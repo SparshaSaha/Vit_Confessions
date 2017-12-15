@@ -338,7 +338,7 @@ module.exports= function(mongo){
           var data=dataJson;
 
           var feed=new Feed({
-            id:data.id,
+            f_id:data.id,
             user_reg:data.reg_no,
             caption:data.caption,
             photo_link:data.photo_link,
@@ -359,7 +359,7 @@ module.exports= function(mongo){
 
 
       socket.on('addcomment',function(dataJson){
-        User.update({user_reg:dataJson.reg_no,id:dataJson.id},{$push:{
+        User.update({user_reg:dataJson.reg_no,f_id:dataJson.id},{$push:{
           comments:
           {
           comment:dataJson.comment
@@ -376,6 +376,18 @@ module.exports= function(mongo){
       });
       });
 
-    //  socket.on()
+      socket.on("getfeeds",function(dataJson){
+        Feed.find().sort(f_id).limit(dataJson.noofposts).exec(function(err,resp){
+          if(err)
+          {
+            socket.emit("getfeeds_reply","error");
+          }
+          else {
+            socket.emit("getfeeds_reply",resp);
+          }
+        });
+      });
+
+
   });
 }
