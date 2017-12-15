@@ -195,7 +195,7 @@ module.exports= function(mongo){
           User.find({email:data.email},(err,resp)=>{
             if(!err){
               var temp=resp[0].recpost;
-              socket.emit("getreceivedpost_reply", JSON.stringify(temp));
+              socket.emit("getreceivedpost_reply", temp);
             }
             else {
               socket.emit('getreceivedpost_reply', "error");
