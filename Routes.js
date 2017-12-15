@@ -332,11 +332,13 @@ module.exports= function(mongo){
         });
 
 
-        //All feeds function
+        //All feeds function start from here
+
         socket.on('addfeed',function(dataJson){
           var data=dataJson;
 
           var feed=new Feed({
+            id:data.id,
             user_reg:data.reg_no,
             caption:data.caption,
             photo_link:data.photo_link,
@@ -354,5 +356,25 @@ module.exports= function(mongo){
 
         });
   });
+
+
+      socket.on('addcomment',function(dataJson){
+        User.update({user_reg:dataJson.reg_no,id:dataJson.id},{$push:{
+          comments:
+          {
+          comment:dataJson.comment
+          }
+
+      }},function(err){
+          if(err)
+          {
+            socket.emit("addcomment_reply","error");
+          }
+          else{
+            socket.emit("addcomment_reply","successful");
+          }
+      });
+      });
+      
 
 }
