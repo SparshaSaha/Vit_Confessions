@@ -343,8 +343,7 @@ module.exports= function(mongo){
             caption:data.caption,
             photo_link:data.photo_link,
             date:data.date,
-            time:data.time,
-            comments:[]
+            time:data.time
           });
           feed.save((err,resp)=>{
             if(err)
@@ -387,6 +386,8 @@ module.exports= function(mongo){
           }
         });
       });
+
+
 
 
   });
