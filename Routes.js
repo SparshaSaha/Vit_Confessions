@@ -355,7 +355,7 @@ module.exports= function(mongo){
           });
 
         });
-  });
+
 
 
       socket.on('addcomment',function(dataJson){
@@ -375,6 +375,7 @@ module.exports= function(mongo){
           }
       });
       });
-      
 
+    //  socket.on()
+  });
 }
