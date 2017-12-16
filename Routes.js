@@ -195,7 +195,7 @@ module.exports= function(mongo){
           User.find({email:data.email},(err,resp)=>{
             if(!err){
               var temp=resp[0].recpost;
-              socket.emit("getreceivedpost_reply", JSON.stringify(temp));
+              socket.emit("getreceivedpost_reply", temp);
             }
             else {
               socket.emit('getreceivedpost_reply', "error");
@@ -332,17 +332,18 @@ module.exports= function(mongo){
         });
 
 
-        //All feeds function
+        //All feeds function start from here
+
         socket.on('addfeed',function(dataJson){
           var data=dataJson;
 
           var feed=new Feed({
+            f_id:data.id,
             user_reg:data.reg_no,
             caption:data.caption,
             photo_link:data.photo_link,
             date:data.date,
-            time:data.time,
-            comments:[]
+            time:data.time
           });
           feed.save((err,resp)=>{
             if(err)
@@ -353,6 +354,41 @@ module.exports= function(mongo){
           });
 
         });
-  });
 
+
+
+      socket.on('addcomment',function(dataJson){
+        User.update({user_reg:dataJson.reg_no,f_id:dataJson.id},{$push:{
+          comments:
+          {
+          comment:dataJson.comment
+          }
+
+      }},function(err){
+          if(err)
+          {
+            socket.emit("addcomment_reply","error");
+          }
+          else{
+            socket.emit("addcomment_reply","successful");
+          }
+      });
+      });
+
+      socket.on("getfeeds",function(dataJson){
+        Feed.find().sort(f_id).limit(dataJson.noofposts).exec(function(err,resp){
+          if(err)
+          {
+            socket.emit("getfeeds_reply","error");
+          }
+          else {
+            socket.emit("getfeeds_reply",resp);
+          }
+        });
+      });
+
+
+
+
+  });
 }
