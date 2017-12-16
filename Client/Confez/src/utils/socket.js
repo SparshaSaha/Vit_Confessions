@@ -4,12 +4,15 @@ import {Strings} from '../R';
 class socket {
 
   static connectToServer(callback){
-    global.socket = SocketIOClient(Strings.wsLink);
-    console.log("Connecting to Server");
-    global.socket.on('connect',(socket)=>{
-      console.log("Connected");
-      callback();
-    });
+    if(!global.socket){
+      global.socket = SocketIOClient(Strings.wsLink);
+      console.log("Connecting to Server");
+      global.socket.on('connect',(socket)=>{
+        console.log("Connected");
+        console.log(global.socket);
+        callback();
+      });
+    }
   }
 
   static beginReceivingFor(channel,callback,onComplete){

@@ -9,12 +9,12 @@ export default class RoundedText extends Component {
     const combined = StyleSheet.flatten([styles.viewDefaultStyle,custom]);
     return(
       <View style={combined}>
-        <Image source={this.props.imgSource} style={styles.image}/>
+        <Image source={this.props.imgSource} style={[this.props.imageStyle,{alignSelf:'center'}]}/>
         <TextInput underlineColorAndroid='transparent'
         placeholder={this.props.placeholder}
-        style={StyleSheet.flatten([this.props.inputTextStyle,{flex:1,marginTop:6}])}
+        style={StyleSheet.flatten([this.props.inputTextStyle,{flex:1}])}
         secureTextEntry={this.props.secureTextEntry}
-        onChangeText={this.props.onChangeText}>{this.props.children}</TextInput>
+        onChangeText={this.props.onChangeText} autoCapitalize={this.props.autoCapitalize}>{this.props.children}</TextInput>
       </View>
     );
   }
@@ -28,11 +28,6 @@ const styles =  StyleSheet.create({
     borderColor:Colors.primary,
     flexDirection:'row',
   },
-  image:{
-    width : 25,
-    height :25,
-    alignSelf:'center'
-  }
 });
 
 AppRegistry.registerComponent('RoundedText',()=>RoundedText);

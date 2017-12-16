@@ -1,6 +1,6 @@
 Images = {
   logo : require('./img/logo.png'),
-  background : require('./img/back4.jpg'),
+  background : require('./img/back1.png'),
   username : require('./img/user.png'),
   pass : require('./img/locked.png'),
   back :  require('./img/back.png'),
@@ -8,7 +8,14 @@ Images = {
   mail : require('./img/mail.png'),
   home :  require('./img/home.png'),
   chats : require('./img/chats.png'),
-  settings : require('./img/settings.png')
+  settings : require('./img/settings.png'),
+  search : require('./img/search.png'),
+  personal : require('./img/personal.png'),
+  key : require('./img/key.png'),
+  camera : require('./img/camera.png'),
+  login : require('./img/login.png'),
+  hat : require('./img/hat.png'),
+  unlocked : require('./img/unlocked.png')
 };
 
 Colors={

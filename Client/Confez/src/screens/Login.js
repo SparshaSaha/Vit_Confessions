@@ -46,19 +46,21 @@ export default class Login extends Component{
         placeholder='Username'
         style={dynamicStyle}
         inputTextStyle={styles.inputTextStyle}
-        onChangeText={(regNo)=>{this.setState({email})}} >
+        onChangeText={(regNo)=>{this.setState({email})}}
+        imageStyle = {styles.image} >
           saha.sparsha@gmail.com
         </RoundedText>
 
         <RoundedText imgSource = {Images.pass}
         placeholder='********' secureTextEntry={true}
         style={dynamicStyle} inputTextStyle={styles.inputTextStyle}
-        onChangeText={(password)=>{this.setState({password})}}>
+        onChangeText={(password)=>{this.setState({password})}}
+        imageStyle = {styles.image}>
           9790722134
         </RoundedText>
 
         <RkButton rkType='rounded' onPress={this.onLoginPress}
-          style={{backgroundColor:Colors.primary,width:this.state.width*0.75, marginVertical:20}}>
+          style={{backgroundColor:Colors.primary,width:'75%', marginVertical:20}}>
             Login
         </RkButton>
         <TouchableOpacity onPress={this.onSignUpPress}>
@@ -98,7 +100,12 @@ const styles = StyleSheet.create({
  },
  inputTextStyle:{
    fontSize:16,
-   color:'black'
+   color:'black',
+   marginTop:6
+ },
+ image:{
+   width : 25,
+   height :25,
  }
 });
 

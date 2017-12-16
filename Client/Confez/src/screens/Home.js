@@ -4,6 +4,7 @@ import {TabNavigator} from 'react-navigation';
 import Chats from './Chats';
 import Feeds from './Feeds';
 import Settings from './Settings';
+import {socket} from '../utils/socket'
 import {Images, Colors} from '../R';
 
 const styles = StyleSheet.create({
@@ -13,29 +14,31 @@ const styles = StyleSheet.create({
   }
 })
 
+socket.connectToServer(()=>{})
+
 export default Home = TabNavigator({
   feeds : {
     screen : Feeds,
     navigationOptions:{
-      title : "Feeds",
-      tabBarLabel : "Feeds",
-      tabBarIcon: ({ tintColor }) => (<Image source={Images.home} style={[styles.tabIcon,{tintColor: tintColor}]}/>),
+        title : "Feeds",
+        tabBarLabel : "Feeds",
+        tabBarIcon: ({ tintColor }) => (<Image source={Images.home} style={[styles.tabIcon,{tintColor: tintColor}]}/>),
     }
   },
   chats : {
     screen : Chats,
     navigationOptions :{
-          title: 'Chats',
-          tabBarLabel:'Chats',
-          tabBarIcon: ({ tintColor }) => (<Image source={Images.chats} style={[styles.tabIcon,{tintColor: tintColor}]}/>),
+        title: 'Chats',
+        tabBarLabel:'Chats',
+        tabBarIcon: ({ tintColor }) => (<Image source={Images.chats} style={[styles.tabIcon,{tintColor: tintColor}]}/>),
       }
     },
-    settings : {
-      screen : Settings,
-      navigationOptions :{
-            title: 'Settings',
-            tabBarLabel:'Settings',
-            tabBarIcon: ({ tintColor }) => (<Image source={Images.settings} style={[styles.tabIcon,{tintColor: tintColor}]}/>),
+  settings : {
+    screen : Settings,
+    navigationOptions :{
+        title: 'Settings',
+        tabBarLabel:'Settings',
+        tabBarIcon: ({ tintColor }) => (<Image source={Images.settings} style={[styles.tabIcon,{tintColor: tintColor}]}/>),
         }
       },
 },{
