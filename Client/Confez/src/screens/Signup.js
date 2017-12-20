@@ -96,7 +96,7 @@ export default class Signup extends Component {
     const dynamicStyle =  StyleSheet.flatten([widthStyle,styles.inputView]);
     return(
       <ScrollView>
-        <View style={[styles.container,{width : this.state.width,height :this.state.height*0.95}]}>
+        <View style={[styles.container,{width : this.state.width}]}>
           <Image source={R.Images.logo} style={{width:100,height:100, marginTop:'10%'}}/>
           <Text style={styles.title}>Confez</Text>
           <StepIndicator current={this.state.currentPage} style={{marginTop:10}}/>
@@ -183,15 +183,16 @@ const styles = StyleSheet.create({
     flex:1,
     justifyContent:'center',
     alignItems :'center',
+    backgroundColor:'white'
   },
   inputView:{
     margin:10,
-    paddingHorizontal:10
+    paddingHorizontal:10,
+    paddingVertical : 6,
   },
   inputTextStyle:{
     fontSize:16,
     color:'black',
-    marginTop:6,
   },
   title :{
    fontSize : 35,

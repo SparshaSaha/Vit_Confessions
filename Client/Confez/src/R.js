@@ -1,6 +1,6 @@
 Images = {
   logo : require('./img/logo.png'),
-  background : require('./img/back1.png'),
+  background : require('./img/back6.jpg'),
   username : require('./img/user.png'),
   pass : require('./img/locked.png'),
   back :  require('./img/back.png'),
@@ -15,14 +15,22 @@ Images = {
   camera : require('./img/camera.png'),
   login : require('./img/login.png'),
   hat : require('./img/hat.png'),
-  unlocked : require('./img/unlocked.png')
+  unlocked : require('./img/unlocked.png'),
+  write : require('./img/write.png'),
+  mask : require('./img/mask.png'),
+  photo : require('./img/photo.png'),
+  location : require('./img/location.png'),
+  send : require('./img/send.png')
 };
 
 Colors={
   primary : '#D80027',
   teal :'#008080',
   steel : '#4682b4',
-  green : '#27ae61'
+  green : '#27ae61',
+  yellow : '#ffff00',
+  backgroundGrey : '#E7E7E7',
+  disabledImageTint : '#878787'
 };
 
 Strings={

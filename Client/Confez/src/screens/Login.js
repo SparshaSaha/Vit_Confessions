@@ -88,6 +88,7 @@ const styles = StyleSheet.create({
     alignItems:'center',
     justifyContent:'center',
     padding:20,
+    backgroundColor:'white'
   },
   title :{
    fontSize : 35,
@@ -96,12 +97,12 @@ const styles = StyleSheet.create({
   },
  inputView:{
    margin:5,
-   paddingHorizontal:10
+   paddingHorizontal:10,
+   paddingVertical : 6,
  },
  inputTextStyle:{
    fontSize:16,
    color:'black',
-   marginTop:6
  },
  image:{
    width : 25,

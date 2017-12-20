@@ -11,10 +11,10 @@ global.socket = null;
 global.channels = {};
 
 AppRegistry.registerComponent('Confez', () =>StackNavigator({
-  Home : {screen : Home},
   Splash : {screen : SplashScreen},
   Login : {screen : Login},
   Signup : {screen : Signup},
+  Home : {screen : Home},
 },{
   navigationOptions:{
     headerMode : 'screen'
