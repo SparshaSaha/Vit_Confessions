@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import {AppRegistry, View, StyleSheet, Text, Image, Dimensions, TouchableOpacity} from 'react-native';
-import {RkButton, RkText} from 'react-native-ui-kitten';
-import {Images, Colors} from '../R';
+import {RkButton} from 'react-native-ui-kitten';
+import {Images, Colors,Strings} from '../R';
 import RoundedText from '../components/RoundedText'
-import SocketIOClient from 'socket.io-client';
+import {socket} from '../utils/socket'
 
 export default class Login extends Component{
   static navigationOptions={
@@ -14,8 +14,8 @@ export default class Login extends Component{
     this.state={
       width:null,
       height:null,
-      regNo:'',
-      password:''
+      email:'saha.sparsha@gmail.com',
+      password:'9790722134'
     }
   }
   componentWillMount(){
@@ -23,15 +23,15 @@ export default class Login extends Component{
     this.setState({width:window.width,height:window.height});
   }
   onLoginPress=()=>{
-    this.socket = SocketIOClient('https://vitconfession.herokuapp.com/');
-    this.socket.on('connect',(socket)=>{
-      console.log("Conncted");
-      this.socket.on('signin_reply',(data)=>{
-        console.log(data);
-      });
-      this.socket.emit("signin",{email:'saha.sparsha@gmail.com',password:'9790722134'});
+    socket.beginReceivingFor("signin_reply",(result)=>{
+      console.log(result);
+    },()=>{
+      socket.send("signin",{email:this.state.email,password:this.state.password})
     });
-    console.log(this.state.regNo);
+  }
+  onSignUpPress=()=>{
+    const {navigate}= this.props.navigation;
+    navigate('Signup',{});
   }
   render(){
     const widthStyle = {width:this.state.width*0.85};
@@ -41,15 +41,31 @@ export default class Login extends Component{
       <View style={styles.container}>
       <Image source={Images.logo} style={{width:100,height:100}} />
         <Text style={styles.title}>Confez</Text>
-        <RoundedText imgSource ={Images.username}placeholder='Username' style={dynamicStyle} inputTextStyle={styles.inputTextStyle} onChangeText={(regNo)=>{this.setState({regNo})}} />
-        <RoundedText imgSource = {Images.pass} placeholder='********' secureTextEntry={true} style={dynamicStyle} inputTextStyle={styles.inputTextStyle} onChangeText={(password)=>{this.setState({password})}}/>
+
+        <RoundedText imgSource ={Images.username}
+        placeholder='Username'
+        style={dynamicStyle}
+        inputTextStyle={styles.inputTextStyle}
+        onChangeText={(regNo)=>{this.setState({email})}}
+        imageStyle = {styles.image} >
+          saha.sparsha@gmail.com
+        </RoundedText>
+
+        <RoundedText imgSource = {Images.pass}
+        placeholder='********' secureTextEntry={true}
+        style={dynamicStyle} inputTextStyle={styles.inputTextStyle}
+        onChangeText={(password)=>{this.setState({password})}}
+        imageStyle = {styles.image}>
+          9790722134
+        </RoundedText>
+
         <RkButton rkType='rounded' onPress={this.onLoginPress}
-          style={{backgroundColor:Colors.primary,width:this.state.width*0.75, marginVertical:20}}>
+          style={{backgroundColor:Colors.primary,width:'75%', marginVertical:20}}>
             Login
         </RkButton>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={this.onSignUpPress}>
         <View style={{flexDirection:'row'}}>
-          <Text>Don't Have an Account? </Text>
+          <Text>Don't Have an account? </Text>
           <Text style={{fontWeight:'bold'}}> Signup</Text>
         </View>
         </TouchableOpacity>
@@ -78,18 +94,18 @@ const styles = StyleSheet.create({
    fontFamily : 'IndieFlower',
    color : 'black'
   },
-  welcome :{
-   fontSize : 45,
-   color : 'white',
-   marginVertical:10
-  },
  inputView:{
    margin:5,
    paddingHorizontal:10
  },
  inputTextStyle:{
    fontSize:16,
-   color:'black'
+   color:'black',
+   marginTop:6
+ },
+ image:{
+   width : 25,
+   height :25,
  }
 });
 
