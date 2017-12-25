@@ -1,0 +1,37 @@
+{
+  "name": "Confez",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "jest"
+  },
+  "dependencies": {
+    "react": "16.0.0",
+    "react-native": "0.51.0",
+    "react-native-elements": "^0.18.5",
+    "react-native-image-crop-picker": "^0.19.1",
+    "react-native-parallax-scroll-view": "^0.20.1",
+    "react-native-progress": "^3.4.0",
+    "react-native-super-grid": "^2.0.1",
+    "react-native-swiper": "^1.5.13",
+    "react-native-ui-kitten": "^2.0.1",
+    "react-native-vector-icons": "^4.4.2",
+    "react-navigation": "^1.0.0-beta.21",
+    "socket.io": "^2.0.4"
+  },
+  "devDependencies": {
+    "babel-jest": "21.2.0",
+    "babel-preset-react-native": "4.0.0",
+    "jest": "21.2.1",
+    "react-test-renderer": "16.0.0"
+  },
+  "jest": {
+    "preset": "react-native"
+  },
+  "rnpm": {
+    "assets": [
+      "./src/fonts"
+    ]
+  }
+}

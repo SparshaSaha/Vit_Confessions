@@ -1,0 +1,97 @@
+Server functions along with their return data
+
+When sending data through sockets basic structure of dataJson
+
+dataJson:
+{
+id: "Registration number of the user"
+data: "JSON string of whatever data has to be sent"
+};
+
+1>.
+structure:
+socket.on('send',function(dataJson)
+
+dataJson.data:
+{
+  data.tomail,
+  data.frommail,
+  data.message,
+  data.date,
+  data.time
+}
+
+return:
+socket.emit('send_reply',"successful");
+socket.emit('send_reply',"error");
+
+2>.
+structure:
+socket.on('signup',function(dataJson)
+
+dataJson.data:
+{
+data.email,
+data.password,
+data.reg_no,
+data.username,
+data.name,
+photo_link:data.photo_link
+}
+
+return:
+socket.emit('signup_reply', 'error');
+socket.emit('signup_reply','successful');
+
+3>.
+structure:
+socket.on('signin', function(dataJson)
+
+dataJson.data:
+{
+email,
+password
+};
+
+return:
+temp:
+{
+  resp[0].email,
+  resp[0].password,
+  resp[0].reg_no,
+  resp[0].username,
+  resp[0].recpost,
+  resp[0].senpost,
+  resp[0].name,
+  resp[0].standing_credits,
+  resp[0].photo_link
+};
+socket.emit('signin_reply' , JSON.stringify(temp));
+socket.emit('signin_reply', 'error');
+
+
+4>.
+structure:
+socket.on("getreceivedpost",(dataJson)
+
+dataJson.data:
+{
+email
+};
+
+return:
+socket.emit("getreceivedpost_reply",JSON.stringify(recpost));
+socket.emit('getreceivedpost_reply',"error");
+
+5>.
+structure:
+socket.on("searchuser",(dataJson)=>
+
+dataJson.data:
+{
+parms: email || reg_no || username || name
+};
+temp: array of users
+return:
+socket.emit('searchuser_reply',"error");
+socket.emit('searchuser_reply',temp);

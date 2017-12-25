@@ -1,13 +1,14 @@
 const User=require("./Models/Account");
 const Message=require("./Models/Message");
+const Feed=require("./Models/Feed");
 var fs = require('fs');
 var http = require('http');
 var socketio = require('socket.io');
 const port=process.env.PORT || 8080;
 
-
 module.exports= function(mongo){
-  sequenceNumber=new Map();
+  onlinemap=new Map();
+  revonlinemap=new Map();
 
   var server = http.createServer(function(req, res) {
     res.writeHead(200, { 'Content-type': 'text/html'});
@@ -18,17 +19,42 @@ module.exports= function(mongo){
   });
 
   socketio.listen(server).on('connection', function (socket) {
+
+    socket.on('check_username',function(user){
+      User.find({username:user},(err,resp)=>{
+        if(err)
+        {
+          socket.emit('check_username_reply',"error");
+        }
+        else if(resp.length==0)
+        socket.emit('check_username_reply',"available");
+        else {
+          socket.emit('check_username_reply',"taken");
+        }
+      });
+    });
+
+    socket.on('register', function(reg_no){
+      onlinemap[reg_no]=socket;
+      revonlinemap[socket]=reg_no;
+    });
+
+    socket.on('disconnect',function(){
+      onlinemap.delete(revonlinemap[socket]);
+      revonlinemap.delete(socket);
+    });
+
+
       socket.on('message', function (msg) {
 
           console.log('Message Received: ', msg);
-          socket.emit('message', 1123, msg);
+          socket.emit('message', msg);
       });
 
       //Send socket function
         socket.on('send',function(dataJson){
 
-          var id=dataJson.id;
-          var data=dataJson.data;
+          var data=dataJson;
 
           User.update({email:data.tomail},{$push:{
             recpost:
@@ -41,10 +67,11 @@ module.exports= function(mongo){
             }
           }},function(err){
             if(err){
-            throw err;
-            socket.emit('send_reply',id, "error");
+            socket.emit('send_reply', "error");
           }
           });
+
+
 
         //Update sentmessage for the sender
           User.update({email:data.frommail},{$push:{
@@ -61,8 +88,8 @@ module.exports= function(mongo){
             if(err)
             throw err;
             else {
-              socket.emit('new_message',data.for_user, data);
-              socket.emit('send_reply',data.from_user, "successful");
+              socket.emit('new_message', data);
+              socket.emit('send_reply', "successful");
             }
           });
       });
@@ -71,8 +98,9 @@ module.exports= function(mongo){
 
     //Sign up user
       socket.on('signup',function(dataJson){
-        var id=dataJson.id;
-        var data=dataJson.data;
+        var data=dataJson;
+        console.log("from signup: "+JSON.stringify(dataJson));
+
         var user=new User({
           email:data.email,
           password:data.password,
@@ -84,23 +112,26 @@ module.exports= function(mongo){
 
         });
         user.save((err,res1)=>{
-          if(err)
-          socket.emit('signup_reply', id, 'error');
-          else
-          socket.emit('signup_reply', id, 'successful');
+          if(err){
+          socket.emit('signup_reply','error');
+        }
+          else{
+          socket.emit('signup_reply','successful');
+        }
         })
 
       });
 
+
+
       //Update credits for a user
       socket.on('update_credits',function(dataJson){
-        var id=dataJson.id;
-        var data=dataJson.id;
+        var data=dataJson;
             User.update({email:data.email},{$set:{standing_credits:data.credits}},function(err,resp1){
               if(err)
-              socket.emit('update_credits_reply', id,'error');
+              socket.emit('update_credits_reply','error');
               else {
-                socket.emit('update_credits_reply', id, 'successful');
+                socket.emit('update_credits_reply', 'successful');
               }
             });
         });
@@ -108,11 +139,11 @@ module.exports= function(mongo){
 
         //Sign in user
         socket.on('signin', function(dataJson){
-          var id=dataJson.id;
-          var data=dataJson.data;
+          var data=dataJson;
+          console.log("from signin: "+JSON.stringify(dataJson));
           User.find({email:data.email,password:data.password},function(err,resp){
             if(resp.length==0){
-              socket.emit('signin_reply', id, 'error');
+              socket.emit('signin_reply', 'error');
               }
               else {
 
@@ -121,14 +152,12 @@ module.exports= function(mongo){
                   password:resp[0].password,
                   reg_no:resp[0].reg_no,
                   username:resp[0].username,
-                  recpost:resp[0].recpost,
-                  senpost:resp[0].senpost,
                   name:resp[0].name,
                   standing_credits:resp[0].standing_credits,
                   photo_link:resp[0].photo_link
                 };
 
-                socket.emit('signin_reply' ,id, JSON.stringify(temp));
+                socket.emit('signin_reply' ,temp+"ko");
               }
           });
         });
@@ -139,18 +168,17 @@ module.exports= function(mongo){
 
         // Update profile pic link
         socket.on("updateprofilepic",(dataJson)=>{
-          var id=dataJson.id;
-          var data=dataJson.data;
+          var data=dataJson;
           User.find({email:data.email},(err,resp)=>{
             if(err)
-            socket.emit('updateprofilepic_reply', id, "error");
+            socket.emit('updateprofilepic_reply', "error");
             else {
               {
                 User.update({email:data.email},{$set:{photo_link:data.photo_link}},function(err,resp1){
                   if(err)
-                  socket.emit('updateprofilepic_reply', id, "error");
+                  socket.emit('updateprofilepic_reply', "error");
                   else {
-                    socket.emit('updateprofilepic_reply', id, "successful");
+                    socket.emit('updateprofilepic_reply', "successful");
                   }
                 });
               }
@@ -161,119 +189,80 @@ module.exports= function(mongo){
 
 
 
-
+      //Get received post for an User
       socket.on("getreceivedpost",(dataJson)=>{
-        var id=dataJson.id;
-        var data=dataJson.data;
+        var data=dataJson;
           User.find({email:data.email},(err,resp)=>{
             if(!err){
               var temp=resp[0].recpost;
-              socket.emit("getreceivedpost_reply", id, JSON.stringify(temp));
+              socket.emit("getreceivedpost_reply", temp);
             }
             else {
-              socket.emit('getreceivedpost_reply', id, "error");
+              socket.emit('getreceivedpost_reply', "error");
             }
           });
         });
 
 
-
-  });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//Send a new post
-app.get("/send",(req,res)=>{
-  //Update for user for whom the message is meant for
-  User.update({email:req.query.tomail},{$push:{
-    recpost:
-    {
-      for_user:req.query.tomail,
-      from_user:req.query.frommail,
-      message:req.query.message,
-      date:req.query.date,
-      time:req.query.time
-    }
-  }},function(err){
-    if(err){
-    throw err;
-    res.send("0");
-  }
-  });
-
-//Update sentmessagefor the sender
-  User.update({email:req.query.frommail},{$push:{
-    senpost:
-    {
-      for_user:req.query.tomail,
-      from_user:req.query.frommail,
-      message:req.query.message,
-      date:req.query.date,
-      time:req.query.time
-    }
-  }
-  },function(err){
-    if(err)
-    throw err;
-    else {
-      res.send("1");
-    }
-  });
-
-
-});
-
-app.get("/seeall",(req,res)=>{
-  User.find(function(err,resp){
-    res.json(resp);
-  });
-});
-
-//Search by Name or reg no. or email
-app.get("/searchuser",(req,res)=>{
-  var z=1;
-  var x=req.query.parms;
-  User.find({name:new RegExp(x)},function(err,resp){
-    if(resp.length==0){
-
-      User.find({reg_no:new RegExp(x)},function(err,resp){
-        if(resp.length==0){
-
-          User.find({username:new RegExp(x)},function(err,resp){
+        //Search by Name or reg no. or email
+        socket.on("searchuser",(dataJson)=>{
+          var data=dataJson;
+          var z=1;
+          var x=data.parms;
+          User.find({name:new RegExp(x)},function(err,resp){
             if(resp.length==0){
 
-              User.find({email:new RegExp(x)},function(err,resp){
-                if(resp.length==0)
-                {
-                  res.send("0");
+              User.find({reg_no:new RegExp(x)},function(err,resp){
+                if(resp.length==0){
+
+                  User.find({username:new RegExp(x)},function(err,resp){
+                    if(resp.length==0){
+
+                      User.find({email:new RegExp(x)},function(err,resp){
+                        if(resp.length==0)
+                        {
+                          socket.emit('searchuser_reply', "error");
+
+                        }
+                        else {
+                          var temp=new Array();
+                          for(i=0;i<resp.length;i++)
+                          {
+                            temp.push(resp[i].email);
+                          }
+
+                          socket.emit('searchuser_reply', temp);
+                          z=1;
+                        }
+
+                      });
+                    }
+
+                    else {
+                      var temp=new Array();
+                      for(i=0;i<resp.length;i++)
+                      {
+                        temp.push(resp[i].username);
+                      }
+
+                      socket.emit('searchuser_reply', temp);
+                      z=1;
+                    }
+                  });
 
                 }
+
                 else {
                   var temp=new Array();
                   for(i=0;i<resp.length;i++)
                   {
-                    temp.push(resp[i].email);
+                    temp.push(resp[i].reg_no);
                   }
-                  res.send(temp);
+                  socket.broadcast.emit('searchuser_reply',temp);
+                  console.log(temp);
 
                   z=1;
                 }
-
               });
             }
 
@@ -281,88 +270,125 @@ app.get("/searchuser",(req,res)=>{
               var temp=new Array();
               for(i=0;i<resp.length;i++)
               {
-                temp.push(resp[i].username);
+                temp.push(resp[i].name);
               }
-              res.send(temp);
+              socket.emit('searchuser_reply',temp);
               z=1;
             }
-          });
-
-        }
-
-        else {
-          var temp=new Array();
-          for(i=0;i<resp.length;i++)
-          {
-            temp.push(resp[i].reg_no);
-          }
-          res.send(temp);
-          z=1;
-        }
-      });
-    }
-
-    else {
-      var temp=new Array();
-      for(i=0;i<resp.length;i++)
-      {
-        temp.push(resp[i].name);
-      }
-      res.send(temp);
-      z=1;
-    }
-      });
-});
+              });
+        });
 
 
 
 
 
-
-//Return email
-app.get("/getmail",(req,res)=>{
-  var x=req.query.parms;
-  User.find({name:x},function(err,resp){
-    if(resp.length==0){
-
-      User.find({reg_no:x},function(err,resp){
-        if(resp.length==0){
-
-          User.find({username:x},function(err,resp){
+        //Return email
+        socket.on("getmail",(dataJson)=>{
+          var data=dataJson;
+          var x=data.parms;
+          User.find({name:x},function(err,resp){
             if(resp.length==0){
 
-              User.find({email:x},function(err,resp){
-                if(resp.length==0)
-                {
-                  res.send("0");
+              User.find({reg_no:x},function(err,resp){
+                if(resp.length==0){
+
+                  User.find({username:x},function(err,resp){
+                    if(resp.length==0){
+
+                      User.find({email:x},function(err,resp){
+                        if(resp.length==0)
+                        {
+                          socket.emit('getmail_reply', "error");
+
+                        }
+                        else {
+                          var z=resp[0].email;
+                          socket.emit('getmail_reply' ,z);
+                        }
+
+                      });
+                    }
+
+                    else {
+                      var z=resp[0].email;
+                      socket.emit('getmail_reply',z);
+            }
+                  });
 
                 }
+
                 else {
                   var z=resp[0].email;
-                  res.send(z);
-                }
-
+                  socket.emit('getmail_reply',z);
+        }
               });
             }
 
             else {
               var z=resp[0].email;
-              res.send(z);            }
+              socket.emit('getmail_reply',z);
+    }
+              });
+        });
+
+
+        //All feeds function start from here
+
+        socket.on('addfeed',function(dataJson){
+          var data=dataJson;
+
+          var feed=new Feed({
+            f_id:data.id,
+            user_reg:data.reg_no,
+            caption:data.caption,
+            photo_link:data.photo_link,
+            date:data.date,
+            time:data.time
+          });
+          feed.save((err,resp)=>{
+            if(err)
+            socket.emit('addfeed_reply','error');
+            else {
+              socket.emit('addfeed_reply','successful');
+            }
           });
 
-        }
+        });
 
-        else {
-          var z=resp[0].email;
-          res.send(z);        }
+
+
+      socket.on('addcomment',function(dataJson){
+        User.update({user_reg:dataJson.reg_no,f_id:dataJson.id},{$push:{
+          comments:
+          {
+          comment:dataJson.comment
+          }
+
+      }},function(err){
+          if(err)
+          {
+            socket.emit("addcomment_reply","error");
+          }
+          else{
+            socket.emit("addcomment_reply","successful");
+          }
       });
-    }
-
-    else {
-      var z=resp[0].email;
-      res.send(z);    }
       });
-});
+
+      socket.on("getfeeds",function(dataJson){
+        Feed.find().sort(f_id).limit(dataJson.noofposts).exec(function(err,resp){
+          if(err)
+          {
+            socket.emit("getfeeds_reply","error");
+          }
+          else {
+            socket.emit("getfeeds_reply",resp);
+          }
+        });
+      });
 
 
+
+
+  });
 }
