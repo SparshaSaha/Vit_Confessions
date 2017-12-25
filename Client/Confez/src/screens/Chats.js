@@ -1,7 +1,6 @@
 import React,{Component} from 'react';
 import {AppRegistry,View,Text,StyleSheet, FlatList, ScrollView,Image, ListView} from 'react-native'
 import { List, ListItem, SearchBar } from "react-native-elements"
-import ParallaxScrollView from 'react-native-parallax-scroll-view';
 import RoundedText from '../components/RoundedText';
 import {socket} from '../utils/socket';
 import {Images} from '../R'
@@ -59,14 +58,6 @@ export default class Chats extends Component{
     )
   }
 
-  /*
-  <ListView
-  ref="ListView"
-  dataSource = {this.state.dataSource}
-  renderRow ={(rowData)=>this.renderChatItem(rowData)}
-  renderSeparator={this.renderSeparator}
-  />
-  */
 
   render(){
     return(
@@ -85,35 +76,6 @@ export default class Chats extends Component{
           keyExtractor={(item, index) =>index}/>
         </View>
     );
-    /*<FlatList
-    data={this.data}
-    keyExtractor={item => item.name}
-    renderItem ={({item})=>this.renderChatItem(item)}
-    ItemSeparatorComponent ={this.renderSeparator}
-    />*/
-    /*return (
-      <ListView
-       ref = "ListView"
-       dataSource={this.dataSource}
-       renderRow = {(rowData)=>this.renderChatItem(rowData)}
-       renderSeparator={this.renderSeparator}
-       renderScrollComponent={props => (
-         <ParallaxScrollView
-          backgroundColor="white"
-          contentBackgroundColor="white"
-          parallaxHeaderHeight={50}
-          renderFixedHeader={() => (
-            <RoundedText imgSource ={Images.search}
-              placeholder='Search'
-              style={styles.inputView}
-              inputTextStyle={styles.inputTextStyle}
-              onChangeText={(text)=>{this.search(text)}}
-              imageStyle = {styles.image} />
-            )}
-          />
-       )}
-       />
-    );*/
   }
 }
 
@@ -122,12 +84,12 @@ const styles = StyleSheet.create({
     margin :7,
     paddingHorizontal:10,
     marginHorizontal : 10,
+    paddingVertical : 4,
     backgroundColor:'white',
   },
   inputTextStyle:{
     fontSize:16,
     color:'black',
-    marginTop:6
   },
   image:{
     width : 20,

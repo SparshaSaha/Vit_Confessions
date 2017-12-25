@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {AppRegistry, View, Text, Image, StyleSheet,ImageBackground} from 'react-native';
+import {AppRegistry, View, Text, Image, StyleSheet} from 'react-native';
 import {NavigationActions} from 'react-navigation';
 import {Images} from '../R';
 
@@ -50,7 +50,8 @@ const styles = StyleSheet.create({
   container:{
     flex:1,
     justifyContent:'center',
-    alignItems:'center'
+    alignItems:'center',
+    backgroundColor:'white'
   },
   title :{
    fontSize : 45,
@@ -60,7 +61,8 @@ const styles = StyleSheet.create({
  footer :{
    textAlign:'center',
    height:25,
-   fontSize : 12
+   fontSize : 12,
+   backgroundColor:'white'
  }
 });
 
