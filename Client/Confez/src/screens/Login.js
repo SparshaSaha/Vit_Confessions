@@ -63,7 +63,7 @@ export default class Login extends Component{
           style={{backgroundColor:Colors.primary,width:'75%', marginVertical:20}}>
             Login
         </RkButton>
-        <TouchableOpacity onPress={this.onSignUpPress}>
+        <TouchableOpacity onPress={this.onSignUpPress} style={{padding:20}}>
         <View style={{flexDirection:'row'}}>
           <Text>Don't Have an account? </Text>
           <Text style={{fontWeight:'bold'}}> Signup</Text>

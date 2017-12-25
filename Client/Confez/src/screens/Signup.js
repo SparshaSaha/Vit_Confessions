@@ -1,15 +1,18 @@
 import React,{Component} from 'react';
-import {AppRegistry,StyleSheet,Text,View, Image, Dimensions, TouchableOpacity,ScrollView,Alert} from 'react-native';
+import {AppRegistry,StyleSheet,Text,View, Image, Dimensions, TouchableOpacity,ScrollView,Alert,CameraRoll} from 'react-native';
 import {RkButton} from 'react-native-ui-kitten';
+import ImagePicker from 'react-native-image-crop-picker';
 import {socket} from '../utils/socket.js';
 import RoundedText from '../components/RoundedText';
 import StepIndicator from '../components/StepIndicator';
-import Swiper from 'react-native-swiper';
 import * as R from '../R';
 
 
 const isBlank=(str)=> {
   return (!str || /^\s*$/.test(str));
+}
+const isEmail=(str)=>{
+  return (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(str))
 }
 export default class Signup extends Component {
 
@@ -17,7 +20,7 @@ export default class Signup extends Component {
     super(props);
     this.state ={
       name : 'SsdcID',
-      reg_no : '  ',
+      reg_no : '15BCE1203',
       email : 'srisdfdhadvsvrswain25@gmail.com',
       password : '123312',
       retype : '123312',
@@ -25,6 +28,8 @@ export default class Signup extends Component {
       width : null,
       height : null,
       currentPage : 1,
+      profile_image : Images.pro_pic,
+      picAddText:'Tap to add profile picture'
     }
   }
 
@@ -51,9 +56,8 @@ export default class Signup extends Component {
       }
     }
     else if(this.state.currentPage==2){
-      if(isBlank(this.state.email)||isBlank(this.state.username)){
-        Alert.alert('','Incomplete Data !');
-      }
+      if(isBlank(this.state.email)||isBlank(this.state.username)) Alert.alert('','Incomplete Data !');
+      else if(!isEmail(this.state.email)) Alert.alert('','Invalid Email');
       else{
         this.refs.form.scrollTo({x:this.state.width*2,y:0,animated:true});
         this.setState({currentPage:3});
@@ -87,6 +91,19 @@ export default class Signup extends Component {
         socket.send('signup',data);
       });
     }
+  }
+
+  openPicker(){
+    ImagePicker.openPicker({
+      width: 500,
+      height: 500,
+      cropping: true,
+      cropperCircleOverlay:true,
+      mediaType:'photo'
+    }).then(image => {
+      this.setState({profile_image:{uri:image.path},picAddText:''})
+      console.log(image);
+    });
   }
 
 
@@ -159,6 +176,17 @@ export default class Signup extends Component {
             imageStyle = {styles.image}/>
 
             </View>
+
+            <View style={{width : this.state.width,alignItems:'center',justifyContent:'center'}}>
+              <TouchableOpacity onPress={()=>this.openPicker()}>
+              <View >
+              </View>
+                <View style={{borderRadius:100,borderWidth:1,borderColor:Colors.primary,justifyContent:'center',backgroundColor:'#000000BF',overflow:'hidden'}}>
+                  <Image style={{width:130,height:130}} source={this.state.profile_image}/>
+                  <Text style={[styles.addPicStyle,{color:'white'}]}>{this.state.picAddText}</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
           </ScrollView>
 
           <RkButton rkType='rounded' onPress={this.onSignUpPress}
@@ -166,7 +194,7 @@ export default class Signup extends Component {
               {(this.state.currentPage<4?'Continue':'Signup')}
           </RkButton>
 
-          <TouchableOpacity onPress={()=>this.props.navigation.goBack()} style={{marginBottom :'20%'}}>
+          <TouchableOpacity onPress={()=>this.props.navigation.goBack()} style={{marginBottom :'8%',padding:20}}>
             <View style={{flexDirection:'row'}}>
               <Text>Already have an account? </Text>
               <Text style={{fontWeight:'bold'}}> Login</Text>
@@ -179,6 +207,13 @@ export default class Signup extends Component {
 }
 
 const styles = StyleSheet.create({
+  addPicStyle: {
+    position: 'absolute',
+    alignSelf:'center',
+    textAlign:'center',
+    flex:1,
+
+  },
   container:{
     flex:1,
     justifyContent:'center',

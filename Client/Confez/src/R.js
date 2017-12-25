@@ -20,7 +20,9 @@ Images = {
   mask : require('./img/mask.png'),
   photo : require('./img/photo.png'),
   location : require('./img/location.png'),
-  send : require('./img/send.png')
+  send : require('./img/send.png'),
+  plus : require('./img/plus.png'),
+  pro_pic : require('./img/pro-pic.png')
 };
 
 Colors={
