@@ -39,6 +39,7 @@ export default class Login extends Component{
     /*<Image source={Images.background} style={StyleSheet.flatten([styles.backgroundImage,{width:this.state.width,height:this.state.height}])} blurRadius={1.2}/>*/
     return(
       <View style={styles.container}>
+
       <Image source={Images.logo} style={{width:100,height:100}} />
         <Text style={styles.title}>Confez</Text>
 

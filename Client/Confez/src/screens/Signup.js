@@ -1,11 +1,12 @@
 import React,{Component} from 'react';
-import {AppRegistry,StyleSheet,Text,View, Image, Dimensions, TouchableOpacity,ScrollView,Alert,CameraRoll} from 'react-native';
+import {NativeModules,AppRegistry,StyleSheet,Text,View, Image, Dimensions, TouchableOpacity,ScrollView,Alert,CameraRoll} from 'react-native';
 import {RkButton} from 'react-native-ui-kitten';
 import ImagePicker from 'react-native-image-crop-picker';
 import {socket} from '../utils/socket.js';
 import RoundedText from '../components/RoundedText';
 import StepIndicator from '../components/StepIndicator';
 import * as R from '../R';
+import {Drive} from '../utils/drive';
 
 
 const isBlank=(str)=> {
@@ -29,7 +30,8 @@ export default class Signup extends Component {
       height : null,
       currentPage : 1,
       profile_image : Images.pro_pic,
-      picAddText:'Tap to add profile picture'
+      picAddText:'Tap to add profile picture',
+      profilePicture :null
     }
   }
 
@@ -40,6 +42,11 @@ export default class Signup extends Component {
   componentWillMount(){
     var window= Dimensions.get('window');
     this.setState({width:window.width,height:window.height});
+  }
+
+  signUp(photo_link){
+    console.log(photo_link);
+    //SIGN UP
   }
 
   onSignUpPress=()=>{
@@ -76,34 +83,29 @@ export default class Signup extends Component {
       }
     }
     else{
-      let data = {
-        email:this.state.email,
-        password:this.state.password,
-        reg_no:this.state.reg_no,
-        username:this.state.username,
-        name:this.state.name,
-        photo_link:'null'
-      };
-
-      socket.beginReceivingFor('signup_reply',(result)=>{
-        console.log(result);
-      },()=>{
-        socket.send('signup',data);
-      });
+      if(this.state.profilePicture!=null){
+        Drive.uploadFile(this.state.profilePicture,(response)=>{
+          console.log(response);
+          signUp(response.id);
+        });
+      }
+      else{
+        signUp('null')
+      }
     }
   }
 
   openPicker(){
-    ImagePicker.openPicker({
-      width: 500,
-      height: 500,
-      cropping: true,
-      cropperCircleOverlay:true,
-      mediaType:'photo'
-    }).then(image => {
-      this.setState({profile_image:{uri:image.path},picAddText:''})
-      console.log(image);
-    });
+      ImagePicker.openPicker({
+        width: 200,
+        height: 200,
+        cropping: true,
+        cropperCircleOverlay:true,
+        mediaType:'photo'
+      }).then(image => {
+        this.setState({profile_image:{uri:image.path},picAddText:'',profilePicture:image});
+      })
+      .catch(error => this.setState({profile_image : Images.pro_pic,picAddText:'Tap to add profile picture',profilePicture:null}));
   }
 
 
