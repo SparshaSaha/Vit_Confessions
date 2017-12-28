@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "683675862870",
+    "project_id": "firebase-confez"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:683675862870:android:d6e889fe8dd1a049",
+        "android_client_info": {
+          "package_name": "com.confez"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "683675862870-3613gfeok8i84v52kng5rt33qjqtsffp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.confez",
+            "certificate_hash": "8eb1a319d28610e89477dff366531609bb5502e0"
+          }
+        },
+        {
+          "client_id": "683675862870-2lnmu77g8gujgebrtc81mbar4d77da0k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDEhSnOyruGvvHUYb_yyUKhv_cYqXC21D0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

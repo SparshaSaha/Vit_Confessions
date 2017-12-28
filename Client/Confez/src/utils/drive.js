@@ -99,6 +99,11 @@ const Drive ={
   getFileMetadata : (id,callback)=>getFileMetadata(id,callback),
   uploadFile : (image,callback)=>uploadFile(image,callback),
   getFileLink : (id)=>getFileLink(id),
+<<<<<<< HEAD
+=======
+  isTokenValid : ()=>Token(),
+  getNewToken : ()=>getNewToken()
+>>>>>>> Client
 }
 
 export {Drive};

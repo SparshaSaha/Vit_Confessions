@@ -4719,9 +4719,17 @@ react-native-elements@^0.18.5:
     opencollective "^1.0.3"
     prop-types "^15.5.8"
 
+react-native-google-sign-in@^1.0.16:
+  version "1.0.16"
+  resolved "https://registry.yarnpkg.com/react-native-google-sign-in/-/react-native-google-sign-in-1.0.16.tgz#94d59b4ff7613955d9d51ceb4623a2162b3cb5d2"
+
 react-native-image-crop-picker@^0.19.1:
   version "0.19.1"
   resolved "https://registry.yarnpkg.com/react-native-image-crop-picker/-/react-native-image-crop-picker-0.19.1.tgz#29ac98104b89e623501d5bcf476ada875679cce8"
+
+react-native-image-to-base64@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-image-to-base64/-/react-native-image-to-base64-0.1.0.tgz#195fd8ab0348dd72d1fa8a45778ef0cac835ba5b"
 
 react-native-parallax-scroll-view@^0.20.1:
   version "0.20.1"
