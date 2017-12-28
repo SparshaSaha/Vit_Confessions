@@ -88,7 +88,6 @@ function uploadFile(image,callback){
     if(user!=null) upload(image,callback,user.accessToken);
     else{
       getNewToken((user)=>{
-        console.log('GOt',user.accessToken);
         if(user!=null) upload(image,callback,user.accessToken);
       });
     }
@@ -100,8 +99,6 @@ const Drive ={
   getFileMetadata : (id,callback)=>getFileMetadata(id,callback),
   uploadFile : (image,callback)=>uploadFile(image,callback),
   getFileLink : (id)=>getFileLink(id),
-  isTokenValid : ()=>Token(),
-  getNewToken : ()=>getNewToken()
 }
 
 export {Drive};
