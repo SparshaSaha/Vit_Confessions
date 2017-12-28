@@ -18,7 +18,7 @@ AppRegistry.registerComponent('Confez', () =>StackNavigator({
   Signup : {screen : Signup},
   Home : {screen : Home},
   SelectImage : {screen : SelectImage},
-  Crop : {screen : Crop}
+  Crop : {screen : Crop},
 },{
   navigationOptions:{
     headerMode : 'screen'
