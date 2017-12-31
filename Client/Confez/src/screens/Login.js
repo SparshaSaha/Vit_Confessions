@@ -3,7 +3,7 @@ import {AppRegistry, View, StyleSheet, Text, Image, Dimensions, TouchableOpacity
 import {RkButton} from 'react-native-ui-kitten';
 import {Images, Colors,Strings} from '../R';
 import RoundedText from '../components/RoundedText'
-import {socket} from '../utils/socket'
+import Socket from '../utils/socket'
 
 export default class Login extends Component{
   static navigationOptions={
@@ -17,17 +17,16 @@ export default class Login extends Component{
       email:'saha.sparsha@gmail.com',
       password:'9790722134'
     }
+    Socket.addChannel('signin_reply',(result)=>{
+      console.log(result);
+    });
   }
   componentWillMount(){
     var window= Dimensions.get('window');
     this.setState({width:window.width,height:window.height});
   }
   onLoginPress=()=>{
-    socket.beginReceivingFor("signin_reply",(result)=>{
-      console.log(result);
-    },()=>{
-      socket.send("signin",{email:this.state.email,password:this.state.password})
-    });
+    Socket.send("signin",{email:this.state.email,password:this.state.password})
   }
   onSignUpPress=()=>{
     const {navigate}= this.props.navigation;

@@ -7,6 +7,7 @@ import RoundedText from '../components/RoundedText';
 import StepIndicator from '../components/StepIndicator';
 import * as R from '../R';
 import {Drive} from '../utils/drive';
+import Socket from '../utils/socket';
 
 
 const isBlank=(str)=> {
@@ -20,12 +21,12 @@ export default class Signup extends Component {
   constructor(props){
     super(props);
     this.state ={
-      name : 'SsdcID',
-      reg_no : '15BCE1203',
-      email : 'srisdfdhadvsvrswain25@gmail.com',
-      password : '123312',
-      retype : '123312',
-      username : "SPARSasdHS12314",
+      name : 'Sriram Swain',
+      reg_no : '15BCE1223',
+      email : 'awesomesriram25@gmail.com',
+      password : '12345',
+      retype : '12345',
+      username : "sriram0510",
       width : null,
       height : null,
       currentPage : 1,
@@ -33,6 +34,12 @@ export default class Signup extends Component {
       picAddText:'Tap to add profile picture',
       profilePicture :null
     }
+
+    Socket.addChannel('signup_reply',(result)=>{
+      console.log(result);
+      if(result=='successful') this.props.navigation.goBack();
+      else (Alert.alert('','Error'));
+    });
   }
 
   static navigationOptions ={
@@ -46,7 +53,14 @@ export default class Signup extends Component {
 
   signUp(photo_link){
     console.log(photo_link);
-    //SIGN UP
+    Socket.send('signup',{
+      email : this.state.email,
+      password : this.state.password,
+      reg_no : this.state.reg_no,
+      username : this.state.username,
+      name : this.state.name,
+      photo_link : photo_link
+    });
   }
 
   onSignUpPress=()=>{
@@ -86,11 +100,11 @@ export default class Signup extends Component {
       if(this.state.profilePicture!=null){
         Drive.uploadFile(this.state.profilePicture,(response)=>{
           console.log(response);
-          signUp(response.id);
+          this.signUp(response.id);
         });
       }
       else{
-        signUp('null')
+        this.signUp('null')
       }
     }
   }

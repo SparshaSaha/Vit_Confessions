@@ -26,7 +26,9 @@ async function getNewToken(callback){
               callback(user);
             });
           }
-          catch(err){console.log(err);}
+          catch(err){
+            console.log(err);
+          }
         }).catch((err) => {
             console.log(err);
         });
@@ -49,6 +51,7 @@ function upload(image,callback,token){
     'title': image.path,
     'name' :image.path,
     'mimeType': contentType,
+    'writersCanShare' : 'false',
     "parents":["1SUJTUjp1ho7neYvPGD41X-On8NDcrP7v"]
   };
 
@@ -85,7 +88,16 @@ function upload(image,callback,token){
 function uploadFile(image,callback){
   Token((user)=>{
     console.log(user);
-    if(user!=null) upload(image,callback,user.accessToken);
+    if(user!=null) upload(image,(response)=>{
+      if(response.error){
+        getNewToken((user)=>{
+          if(user!=null) upload(image,callback,user.accessToken);
+        });
+      }
+      else{
+        callback(response);
+      }
+    },user.accessToken);
     else{
       getNewToken((user)=>{
         if(user!=null) upload(image,callback,user.accessToken);
@@ -99,11 +111,6 @@ const Drive ={
   getFileMetadata : (id,callback)=>getFileMetadata(id,callback),
   uploadFile : (image,callback)=>uploadFile(image,callback),
   getFileLink : (id)=>getFileLink(id),
-<<<<<<< HEAD
-=======
-  isTokenValid : ()=>Token(),
-  getNewToken : ()=>getNewToken()
->>>>>>> Client
 }
 
 export {Drive};

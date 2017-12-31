@@ -2,33 +2,36 @@ import React,{Component} from 'react';
 import {AppRegistry,View,Text,StyleSheet, FlatList, ScrollView,Image, ListView} from 'react-native'
 import { List, ListItem, SearchBar } from "react-native-elements"
 import RoundedText from '../components/RoundedText';
-import {socket} from '../utils/socket';
-import {Images} from '../R'
+import Socket from '../utils/socket';
+import {Images} from '../R';
+
 export default class Chats extends Component{
 
   constructor(props){
     super(props);
     this.renderChatItem = this._renderChatItem.bind(this);
     this.state ={
-      posts : []
+      posts : [],
+      users :[]
     }
+
+    Socket.addChannel('getreceivedpost_reply',(response)=>{
+      console.log(result);
+      this.setState({posts:result});
+    });
+
+    Socket.addChannel('searchuser_reply',(response)=>{
+      console.log(result);
+    });
+    console.log(global.channels);
   }
 
   componentDidMount(){
-    socket.beginReceivingFor('getreceivedpost_reply',(result)=>{
-      console.log(result);
-      this.setState({posts:result});
-    },()=>{
-      socket.send('getreceivedpost',{email:'sridhar.swain@gmail.com'})
-    })
+    socket.send('getreceivedpost',{email:'sridhar.swain@gmail.com'})
   }
 
   search=(text)=>{
-    socket.beginReceivingFor('searchuser_reply',(result)=>{
-      console.log(result);
-    },()=>{
-      if(text!='') socket.send('searchuser',{parms :text});
-    });
+    if(text!='') socket.send('searchuser',{parms :text});
   }
 
   renderSeparator = () => {

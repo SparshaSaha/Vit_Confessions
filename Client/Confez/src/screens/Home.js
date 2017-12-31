@@ -14,8 +14,6 @@ const styles = StyleSheet.create({
   }
 })
 
-socket.connectToServer(()=>{})
-
 export default Home = TabNavigator({
   feeds : {
     screen : Feeds,
