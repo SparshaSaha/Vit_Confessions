@@ -4,6 +4,10 @@ import {Colors} from '../R'
 
 export default class RoundedText extends Component {
 
+  clearText(){
+    this.refs.input.clear();
+  }
+
   render(){
     const custom =  this.props.style;
     const combined = StyleSheet.flatten([styles.viewDefaultStyle,custom]);
@@ -11,6 +15,7 @@ export default class RoundedText extends Component {
       <View style={combined}>
         <Image source={this.props.imgSource} style={[this.props.imageStyle]}/>
         <TextInput underlineColorAndroid='transparent'
+        ref='input'
         placeholder={this.props.placeholder}
         style={StyleSheet.flatten([this.props.inputTextStyle,{flex:1,marginBottom:-6}])}
         secureTextEntry={this.props.secureTextEntry}

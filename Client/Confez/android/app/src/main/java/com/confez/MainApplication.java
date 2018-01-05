@@ -3,6 +3,8 @@ package com.confez;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.reactlibrary.googlesignin.RNGoogleSignInPackage;
+import com.github.xfumihiro.react_native_image_to_base64.ImageToBase64Package;
 import com.reactnative.ivpusic.imagepicker.PickerPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactNativeHost;
@@ -25,6 +27,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNGoogleSignInPackage(),
+            new ImageToBase64Package(),
             new PickerPackage(),
             new VectorIconsPackage()
       );

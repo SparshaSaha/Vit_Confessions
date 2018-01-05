@@ -22,7 +22,8 @@ Images = {
   location : require('./img/location.png'),
   send : require('./img/send.png'),
   plus : require('./img/plus.png'),
-  pro_pic : require('./img/pro-pic.png')
+  pro_pic : require('./img/pro-pic.png'),
+  cancel : require('./img/cancel.png')
 };
 
 Colors={
@@ -34,7 +35,7 @@ Colors={
   backgroundGrey : '#E7E7E7',
   disabledImageTint : '#878787'
 };
-
+//'https://vitconfession.herokuapp.com/'
 Strings={
   wsLink : 'https://vitconfession.herokuapp.com/'
 }

@@ -1,11 +1,13 @@
 import React,{Component} from 'react';
-import {AppRegistry,StyleSheet,Text,View, Image, Dimensions, TouchableOpacity,ScrollView,Alert,CameraRoll} from 'react-native';
+import {NativeModules,AppRegistry,StyleSheet,Text,View, Image, Dimensions, TouchableOpacity,ScrollView,Alert,CameraRoll} from 'react-native';
 import {RkButton} from 'react-native-ui-kitten';
 import ImagePicker from 'react-native-image-crop-picker';
 import {socket} from '../utils/socket.js';
 import RoundedText from '../components/RoundedText';
 import StepIndicator from '../components/StepIndicator';
 import * as R from '../R';
+import {Drive} from '../utils/drive';
+import Socket from '../utils/socket';
 
 
 const isBlank=(str)=> {
@@ -19,18 +21,25 @@ export default class Signup extends Component {
   constructor(props){
     super(props);
     this.state ={
-      name : 'SsdcID',
-      reg_no : '15BCE1203',
-      email : 'srisdfdhadvsvrswain25@gmail.com',
-      password : '123312',
-      retype : '123312',
-      username : "SPARSasdHS12314",
+      name : 'Sriram Swain',
+      reg_no : '15BCE1223',
+      email : 'awesomesriram25@gmail.com',
+      password : '12345',
+      retype : '12345',
+      username : "sriram0510",
       width : null,
       height : null,
       currentPage : 1,
       profile_image : Images.pro_pic,
-      picAddText:'Tap to add profile picture'
+      picAddText:'Tap to add profile picture',
+      profilePicture :null
     }
+
+    Socket.addChannel('signup_reply',(result)=>{
+      console.log(result);
+      if(result=='successful') this.props.navigation.goBack();
+      else (Alert.alert('','Error'));
+    });
   }
 
   static navigationOptions ={
@@ -40,6 +49,18 @@ export default class Signup extends Component {
   componentWillMount(){
     var window= Dimensions.get('window');
     this.setState({width:window.width,height:window.height});
+  }
+
+  signUp(photo_link){
+    console.log(photo_link);
+    Socket.send('signup',{
+      email : this.state.email,
+      password : this.state.password,
+      reg_no : this.state.reg_no,
+      username : this.state.username,
+      name : this.state.name,
+      photo_link : photo_link
+    });
   }
 
   onSignUpPress=()=>{
@@ -76,34 +97,29 @@ export default class Signup extends Component {
       }
     }
     else{
-      let data = {
-        email:this.state.email,
-        password:this.state.password,
-        reg_no:this.state.reg_no,
-        username:this.state.username,
-        name:this.state.name,
-        photo_link:'null'
-      };
-
-      socket.beginReceivingFor('signup_reply',(result)=>{
-        console.log(result);
-      },()=>{
-        socket.send('signup',data);
-      });
+      if(this.state.profilePicture!=null){
+        Drive.uploadFile(this.state.profilePicture,(response)=>{
+          console.log(response);
+          this.signUp(response.id);
+        });
+      }
+      else{
+        this.signUp('null')
+      }
     }
   }
 
   openPicker(){
-    ImagePicker.openPicker({
-      width: 500,
-      height: 500,
-      cropping: true,
-      cropperCircleOverlay:true,
-      mediaType:'photo'
-    }).then(image => {
-      this.setState({profile_image:{uri:image.path},picAddText:''})
-      console.log(image);
-    });
+      ImagePicker.openPicker({
+        width: 200,
+        height: 200,
+        cropping: true,
+        cropperCircleOverlay:true,
+        mediaType:'photo'
+      }).then(image => {
+        this.setState({profile_image:{uri:image.path},picAddText:'',profilePicture:image});
+      })
+      .catch(error => this.setState({profile_image : Images.pro_pic,picAddText:'Tap to add profile picture',profilePicture:null}));
   }
 
 
