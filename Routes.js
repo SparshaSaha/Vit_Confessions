@@ -10,6 +10,20 @@ module.exports= function(mongo){
   onlinemap=new Map();
   revonlinemap=new Map();
 
+  var array;
+
+  Feed.find().sort("f_id").limit(200).exec(function(err,resp){
+    if(err)
+    {
+    }
+    else {
+      array=resp;
+      console.log(resp);
+    }
+  });
+
+
+
   var server = http.createServer(function(req, res) {
     res.writeHead(200, { 'Content-type': 'text/html'});
     res.end(fs.readFileSync(__dirname + '/index.html'));
@@ -124,7 +138,7 @@ module.exports= function(mongo){
 
 
 
-      //Update credits for a user
+    //Update credits for a user
       socket.on('update_credits',function(dataJson){
         var data=dataJson;
             User.update({email:data.email},{$set:{standing_credits:data.credits}},function(err,resp1){
@@ -189,7 +203,7 @@ module.exports= function(mongo){
 
 
 
-      //Get received post for an User
+    //Get received post for an User
       socket.on("getreceivedpost",(dataJson)=>{
         var data=dataJson;
           User.find({email:data.email},(err,resp)=>{
@@ -228,7 +242,11 @@ module.exports= function(mongo){
                           var temp=new Array();
                           for(i=0;i<resp.length;i++)
                           {
-                            temp.push(resp[i].email);
+                            var x={
+                              res:resp[i].email,
+                              photo_link:resp[i].photo_link
+                            };
+                            temp.push(x);
                           }
 
                           socket.emit('searchuser_reply', temp);
@@ -242,7 +260,11 @@ module.exports= function(mongo){
                       var temp=new Array();
                       for(i=0;i<resp.length;i++)
                       {
-                        temp.push(resp[i].username);
+                        var x={
+                          res:resp[i].username,
+                          photo_link:resp[i].photo_link
+                        };
+                        temp.push(x);
                       }
 
                       socket.emit('searchuser_reply', temp);
@@ -256,7 +278,11 @@ module.exports= function(mongo){
                   var temp=new Array();
                   for(i=0;i<resp.length;i++)
                   {
-                    temp.push(resp[i].reg_no);
+                    var x={
+                      res:resp[i].reg_no,
+                      photo_link:resp[i].photo_link
+                    };
+                    temp.push(x);
                   }
                   socket.broadcast.emit('searchuser_reply',temp);
                   console.log(temp);
@@ -270,7 +296,11 @@ module.exports= function(mongo){
               var temp=new Array();
               for(i=0;i<resp.length;i++)
               {
-                temp.push(resp[i].name);
+                var x={
+                  res:resp[i].name,
+                  photo_link:resp[i].photo_link
+                };
+                temp.push(x);
               }
               socket.emit('searchuser_reply',temp);
               z=1;
@@ -342,14 +372,15 @@ module.exports= function(mongo){
             user_reg:data.reg_no,
             caption:data.caption,
             photo_link:data.photo_link,
-            date:data.date,
-            time:data.time
+            tag:""
           });
           feed.save((err,resp)=>{
             if(err)
             socket.emit('addfeed_reply','error');
             else {
               socket.emit('addfeed_reply','successful');
+              array.unshift(feed);
+              array.pop();
             }
           });
 
@@ -371,9 +402,18 @@ module.exports= function(mongo){
           }
           else{
             socket.emit("addcomment_reply","successful");
+            Feed.find().sort("f_id").limit(200).exec(function(err,resp){
+              if(err)
+              {
+              }
+              else {
+                array=resp;
+              }
+            });
           }
       });
       });
+
 
       socket.on("getfeeds",function(dataJson){
         Feed.find().sort(f_id).limit(dataJson.noofposts).exec(function(err,resp){
@@ -386,9 +426,6 @@ module.exports= function(mongo){
           }
         });
       });
-
-
-
 
   });
 }
