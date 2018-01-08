@@ -242,14 +242,19 @@ module.exports= function(mongo){
                           var temp=new Array();
                           for(i=0;i<resp.length;i++)
                           {
-                            var x={
+                            var y={
                               res:resp[i].email,
-                              photo_link:resp[i].photo_link
+                              photo_link:resp[i].photo_link,
                             };
-                            temp.push(x);
-                          }
+                            temp.push(y);
 
-                          socket.emit('searchuser_reply', temp);
+                          }
+                          var k={
+                            query:x,
+                            result:temp
+                          };
+
+                          socket.emit('searchuser_reply', k);
                           z=1;
                         }
 
@@ -260,14 +265,19 @@ module.exports= function(mongo){
                       var temp=new Array();
                       for(i=0;i<resp.length;i++)
                       {
-                        var x={
+                        var y={
                           res:resp[i].username,
                           photo_link:resp[i].photo_link
                         };
-                        temp.push(x);
+                        temp.push(y);
                       }
 
-                      socket.emit('searchuser_reply', temp);
+                      var k={
+                        query:x,
+                        result:temp
+                      };
+
+                      socket.emit('searchuser_reply',k);
                       z=1;
                     }
                   });
@@ -278,13 +288,18 @@ module.exports= function(mongo){
                   var temp=new Array();
                   for(i=0;i<resp.length;i++)
                   {
-                    var x={
+                    var y={
                       res:resp[i].reg_no,
                       photo_link:resp[i].photo_link
                     };
-                    temp.push(x);
+                    temp.push(y);
                   }
-                  socket.broadcast.emit('searchuser_reply',temp);
+
+                  var k={
+                    query:x,
+                    result:temp
+                  };
+                  socket.emit('searchuser_reply',k);
                   console.log(temp);
 
                   z=1;
@@ -296,13 +311,18 @@ module.exports= function(mongo){
               var temp=new Array();
               for(i=0;i<resp.length;i++)
               {
-                var x={
+                var y={
                   res:resp[i].name,
                   photo_link:resp[i].photo_link
                 };
-                temp.push(x);
+                temp.push(y);
               }
-              socket.emit('searchuser_reply',temp);
+
+              var k={
+                query:x,
+                result:temp
+              };
+              socket.emit('searchuser_reply',k);
               z=1;
             }
               });
