@@ -1,6 +1,8 @@
 const User=require("./Models/Account");
 const Message=require("./Models/Message");
 const Feed=require("./Models/Feed");
+const nodemailer = require('nodemailer');
+
 var gcm = require('node-gcm');
 var server_key='AIzaSyCJB4YaXoW_c7h0-WMDOUFL0RHiNOkU9mA';
 
@@ -12,6 +14,9 @@ const port=process.env.PORT || 8080;
 module.exports= function(mongo){
   onlinemap=new Map();
   revonlinemap=new Map();
+
+  require("./Send_Mail")('saha.sparsha@gmail.com','My password');
+
 
   var array;
 
@@ -457,6 +462,24 @@ module.exports= function(mongo){
         });
       });
 
+      socket.on("forgot_password",function(mail){
+        User.find({email:mail},function(err,resp){
+          if(!err)
+          {
+            require("./Send_Mail")(email);
+            socket.emit("forgot_password_reply","success");
+          }
+          else {
+            socket.emit("forgot_password_reply","error");
+          }
+
+        });
+
+      });
+
   });
+
+
+
 
 }
