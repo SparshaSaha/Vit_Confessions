@@ -15,7 +15,7 @@ module.exports= function(mongo){
   onlinemap=new Map();
   revonlinemap=new Map();
 
-  require("./Send_Mail")('saha.sparsha@gmail.com','My password');
+  //require("./Send_Mail")('saha.sparsha@gmail.com','My password');
 
 
   var array;
