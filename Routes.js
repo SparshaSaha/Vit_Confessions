@@ -218,7 +218,7 @@ module.exports= function(mongo){
       socket.on("getreceivedpost",(dataJson)=>{
         var data=dataJson;
           User.find({email:data.email},(err,resp)=>{
-            if(!err){
+            if(!err && resp.length!=0){
               var temp=resp[0].recpost;
               socket.emit("getreceivedpost_reply", temp);
             }
