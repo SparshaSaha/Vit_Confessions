@@ -1,6 +1,9 @@
 const User=require("./Models/Account");
 const Message=require("./Models/Message");
 const Feed=require("./Models/Feed");
+var gcm = require('node-gcm');
+var server_key='AIzaSyCJB4YaXoW_c7h0-WMDOUFL0RHiNOkU9mA';
+
 var fs = require('fs');
 var http = require('http');
 var socketio = require('socket.io');
@@ -48,9 +51,9 @@ module.exports= function(mongo){
       });
     });
 
-    socket.on('register', function(reg_no){
-      onlinemap[reg_no]=socket;
-      revonlinemap[socket]=reg_no;
+    socket.on('register', function(email){
+      onlinemap[email]=socket;
+      revonlinemap[socket]=email;
     });
 
     socket.on('disconnect',function(){
@@ -102,7 +105,15 @@ module.exports= function(mongo){
             if(err)
             throw err;
             else {
-              socket.emit('new_message', data);
+
+              if(onlinemap[data.tomail]==null)
+              {
+                //TODO: Google Cloud Messaging
+              }
+              else {
+                var soc=onlinemap[data.tomail];
+                soc.emit('new_message',data);
+              }
               socket.emit('send_reply', "successful");
             }
           });
@@ -171,7 +182,7 @@ module.exports= function(mongo){
                   photo_link:resp[0].photo_link
                 };
 
-                socket.emit('signin_reply' ,temp+"ko");
+                socket.emit('signin_reply' ,temp);
               }
           });
         });
@@ -383,7 +394,6 @@ module.exports= function(mongo){
 
 
         //All feeds function start from here
-
         socket.on('addfeed',function(dataJson){
           var data=dataJson;
 
@@ -448,4 +458,5 @@ module.exports= function(mongo){
       });
 
   });
+
 }

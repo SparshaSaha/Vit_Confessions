@@ -16,6 +16,7 @@
   "dependencies": {
     "express": "^4.15.4",
     "mongoose": "^4.11.7",
+    "node-gcm": "^0.14.9",
     "nodemailer": "^4.4.1",
     "socket.io": "^2.0.4"
   },
