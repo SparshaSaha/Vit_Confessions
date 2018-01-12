@@ -469,7 +469,7 @@ module.exports= function(mongo){
           if(!err && resp.length!=0)
           {
             console.log(mail);
-            require("./Send_Mail")(mail);
+            require("./Send_Mail")(mail,resp[0].password);
             socket.emit("forgot_password_reply","success");
           }
           else {
