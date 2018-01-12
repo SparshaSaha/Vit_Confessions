@@ -146,6 +146,8 @@ module.exports= function(mongo){
           socket.emit('signup_reply','error');
         }
           else{
+            onlinemap[user.email]=socket;
+            revonlinemap[socket]=user.email;
           socket.emit('signup_reply','successful');
         }
         })
