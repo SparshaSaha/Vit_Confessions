@@ -464,7 +464,7 @@ module.exports= function(mongo){
 
       socket.on("forgot_password",function(mail){
         User.find({email:mail},function(err,resp){
-          if(!err)
+          if(!err && resp.length!=0)
           {
             require("./Send_Mail")(email);
             socket.emit("forgot_password_reply","success");
